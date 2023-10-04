@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="c89d1d1c-dc8e-407a-9feb-a856f81fc0f5" file="enique-hrms-sapi-local.yaml" />
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="7aa1a2b9-c728-4fb6-be86-07a227042c46" name="enique-hrms-sapi-config" api="enique-hrms-sapi.raml">
+	<apikit:flow-mappings>
+                <apikit:flow-mapping resource="/v1/sapi/officeReadiness/{id}" action="delete" flow-ref="officeReadiness-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/project/{id}" action="delete" flow-ref="project-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/manager/{id}" action="delete" flow-ref="manager-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/expenses/{id}" action="delete" flow-ref="expenses-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/employee/{id}" action="delete" flow-ref="employee-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/formerEmployee/{id}" action="delete" flow-ref="formerEmployee-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/department/{id}" action="delete" flow-ref="department-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/attendance/{id}" action="delete" flow-ref="attendance-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/leave/{id}" action="delete" flow-ref="leave-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/resignationDetails/{id}" action="delete" flow-ref="resignationDetails-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/personalDetails/{id}" action="delete" flow-ref="personalDetails-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/applicant/{id}" action="delete" flow-ref="DELETE-Applicants" />
+                        <apikit:flow-mapping resource="/v1/sapi/compensation/{id}" action="delete" flow-ref="compensation-deleteFlow3" />
+                        <apikit:flow-mapping resource="/v1/sapi/announcements/{id}" action="delete" flow-ref="announcements-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/project/{id}" action="patch" flow-ref="project-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/attendance/{id}" action="patch" flow-ref="attendance-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/officeReadiness/{id}" action="patch" flow-ref="officeReadiness-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/manager/{id}" action="patch" flow-ref="manager-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/department/{id}" action="patch" flow-ref="department-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/resignationDetails/{id}" action="patch" flow-ref="resignationDetails-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/leave/{id}" action="patch" flow-ref="leave-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/compensation/{id}" action="patch" flow-ref="compensation-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/employee/{id}" action="patch" flow-ref="employee-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/personalDetails/{id}" action="patch" flow-ref="personalDetails-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/expenses/{id}" action="patch" flow-ref="expenses-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/applicant/{id}" action="patch" flow-ref="applicant-update-by-id" />
+                        <apikit:flow-mapping resource="/v1/sapi/announcements/{id}" action="patch" flow-ref="announcements-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/formerEmployee/{id}" action="patch" flow-ref="formerEmployee-upsertFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/announcements" action="get" flow-ref="announcements-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/applicant" action="get" flow-ref="applicant-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/attendance" action="get" flow-ref="attendance-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/compensation" action="get" flow-ref="compensation-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/department" action="get" flow-ref="department-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/employee" action="get" flow-ref="employee-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/expenses" action="get" flow-ref="expenses-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/formerEmployee" action="get" flow-ref="formerEmployee-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/leave" action="get" flow-ref="leave-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/manager" action="get" flow-ref="manager-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/officeReadiness" action="get" flow-ref="officeReadiness-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/personalDetails" action="get" flow-ref="personalDetails-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/project" action="get" flow-ref="project-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/resignationDetails" action="get" flow-ref="resignationDetails-getFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/compensation/{id}" action="get" flow-ref="compensation-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/officeReadiness/{id}" action="get" flow-ref="officeReadiness-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/announcements/{id}" action="get" flow-ref="announcements-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/formerEmployee/{id}" action="get" flow-ref="formerEmployee-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/leave/{id}" action="get" flow-ref="leave-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/project/{id}" action="get" flow-ref="project-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/department/{id}" action="get" flow-ref="department-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/resignationDetails/{id}" action="get" flow-ref="resignationDetails-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/employee/{id}" action="get" flow-ref="employee-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/attendance/{id}" action="get" flow-ref="attendance-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/manager/{id}" action="get" flow-ref="manager-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/personalDetails/{id}" action="get" flow-ref="personalDetails-getbyidFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/applicant/{id}" action="get" flow-ref="applicant-get-by-id" />
+                        <apikit:flow-mapping resource="/v1/sapi/applicant" action="post" flow-ref="POST-Applicant" />
+                        <apikit:flow-mapping resource="/v1/sapi/attendance" action="post" flow-ref="attendance-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/compensation" action="post" flow-ref="compensation-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/department" action="post" flow-ref="department-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/employee" action="post" flow-ref="employee-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/expenses" action="post" flow-ref="expenses-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/formerEmployee" action="post" flow-ref="formerEmployee-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/leave" action="post" flow-ref="leave-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/manager" action="post" flow-ref="manager-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/project" action="post" flow-ref="project-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/optionalHoliday" action="get" flow-ref="optionalHoliday-get-all-details-or-get-by-queryparameter" />
+                        <apikit:flow-mapping resource="/v1/sapi/optionalHoliday" action="post" flow-ref="optionalHoliday-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/optionalHoliday/{id}" action="delete" flow-ref="optionalHoliday-delete-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/optionalHoliday/{id}" action="patch" flow-ref="optionalHoliday-upsert-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/personalDetails" action="post" flow-ref="personalDetails-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/resignationDetails" action="post" flow-ref="resignationDetails-createFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/announcements" action="post" flow-ref="announcements-postFlow" />
+                        <apikit:flow-mapping resource="/v1/sapi/expenses/{id}" action="get" flow-ref="expenses-get-by-id-Flow" />
+                        <apikit:flow-mapping resource="/v1/sapi/officeReadiness" action="post" flow-ref="officeReadiness-postFlow" />
+      </apikit:flow-mappings>
+	</apikit:config>
+	<http:listener-config name="enique-hrms-sapi-httpListenerConfig" doc:name="HTTP Listener config" doc:id="67612d9a-be0f-487f-ac1b-aa7c0872c070" >
+		<http:listener-connection host="${http.host}" port="${s.port}" usePersistentConnections="false"/>
+		
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config1" doc:name="Salesforce Config" doc:id="a3ee5bf8-494b-484d-a95a-fd5825a4ed56" sendNullValues="true">
+		<salesforce:basic-connection username="${salesforceconnector.username}" password="${secure::salesforceconnector.password}" securityToken="${secure::salesforceconnector.token}" />
+	</salesforce:sfdc-config>
+	<configuration doc:name="Configuration" doc:id="64097d80-eebe-4eb3-a3e4-8c6cb758233f" defaultErrorHandler-ref="globalErrorHandlerError_Handler" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="4a99ecd4-4fc0-4ab6-9756-3351dd2e2e20" file="enique-hrms-sapi-local.yaml" key="${mule.key}" />
+</mule>

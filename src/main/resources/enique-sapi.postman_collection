@@ -1,0 +1,2366 @@
+{
+	"info": {
+		"_postman_id": "a04f809b-a111-49f2-9e5f-a722fd4e0205",
+		"name": "enique-hrms-sapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "compensation",
+			"item": [
+				{
+					"name": "get-queryparameter-compensation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/demo1?soqlWhereClause=Name='Lakshman'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"demo1"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Lakshman'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "compensation-getbyid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/compensation-getbyid/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"compensation-getbyid",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-compensation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeId\": \"ES00003\",\r\n  \"employeeName\": \"Lakshman\",\r\n  \"salary\": \"100000\",\r\n  \"bonus\": \"20000\",\r\n  \"hike\": \"300000\",\r\n  \"variablePay\": \"64000\",\r\n  \"year\": \"2400000\",\r\n  \"quarter\": \"800000\"\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/compensation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"compensation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-all-compensation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/compensation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"compensation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "compensation-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/compensation/ES00003",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"compensation",
+								"ES00003"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch-compensation",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeId\": \"ES00001\",\r\n  \"employeeName\": \"Lakshman\",\r\n  \"salary\": \"100000\",\r\n  \"bonus\": \"50000\",\r\n  \"hike\": \"300000\",\r\n  \"variablePay\": \"64000\",\r\n  \"year\": \"2400000\",\r\n  \"quarter\": \"800000\"\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/compensation/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"compensation",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "attendance",
+			"item": [
+				{
+					"name": "attendance-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n  \"employeeName\": \"Sai\",\r\n  \"employeeId\": \"ES00006\",\r\n  \"checkInTime\": \"9:30 A.M\",\r\n  \"checkOutTime\": \"6:30 P.M\",\r\n  \"date\": \"14-Feb-2022\",\r\n  \"totalHoursLogged\": \"9 Hours\"\r\n  }\r\n] ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attendance-get-by-queryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance?soqlWhereClause=Name='Thirupati'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Thirupati'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attendance-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attendance-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attendance-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance/ES00006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance",
+								"ES00006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attendance-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n  \"employeeName\": \"Lakshman\",\r\n  \"employeeId\": \"ES00001\",\r\n  \"checkInTime\": \"9:20 A.M\",\r\n  \"checkOutTime\": \"6:30 P.M\",\r\n  \"date\": \"14-Feb-2022\",\r\n  \"totalHoursLogged\": \"9 Hours\"\r\n  }\r\n] ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/attendance/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"attendance",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "formerEmployee",
+			"item": [
+				{
+					"name": "formerEmployee-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[ {\r\n  \"employeeName\": \"Shubam\",\r\n  \"employeeId\": \"ES00005\",\r\n  \"yearsWorked\": \"3 years\"\r\n  }\r\n] ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "formerEmployee-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "formerEmployee-get-by-queryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee?soqlWhereClause=Name='Thirupati'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Thirupati'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "formerEmployee-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "formerEmployee-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[ {\r\n  \"employeeName\": \"Sampath\",\r\n  \"employeeId\": \"ES00006\",\r\n  \"yearsWorked\": \"5 years\"\r\n  }\r\n] ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "formerEmployee-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/formerEmployee/ES00005",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"formerEmployee",
+								"ES00005"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "personalDetails",
+			"item": [
+				{
+					"name": "personalDetails-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n  \"name\": \"Thirupati\",\r\n  \"employeeId\": \"ES00004\",\r\n  \"education\": \"B-Tech\",\r\n  \"maritalStatus\": \"marriage\",\r\n  \"aadharId\": \"436034047654\",\r\n  \"panNumber\": \"4234567\",\r\n  \"fatherName\": \"subbarao\",  \r\n  \"fatherMobileNumber\": \"8666191986\",\r\n  \"email\": \"thirupati@gmail.com\",\r\n  \"dateOfMarriage\": \"10-12-2024\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "personalDetails-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "personalDetails-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "personalDetails-get-by-queryparams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails?soqlWhereClause=Name='Thirupati'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Thirupati'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "personalDetails-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n  \"name\": \"Thirupati\",\r\n  \"employeeId\": \"ES00004\",\r\n  \"education\": \"B-Tech\",\r\n  \"maritalStatus\": \"marriage\",\r\n  \"aadharId\": \"436034047654\",\r\n  \"panNumber\": \"4234567\",\r\n  \"fatherName\": \"subbarao\",  \r\n  \"fatherMobileNumber\": \"8666191986\",\r\n  \"email\": \"thirupati@gmail.com\",\r\n  \"dateOfMarriage\": \"11-12-2024\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails/ES00004",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails",
+								"ES00004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "personalDetails-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/personalDetails/ES00004",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"personalDetails",
+								"ES00004"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "leaves",
+			"item": [
+				{
+					"name": "leave-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeName\": \"Sampath\",\r\n  \"employeeId\": \"ES00005\",\r\n  \"leaveBalance\": \"9\",\r\n  \"leaveType\": \"casual\",\r\n  \"no.ofLeaves\": \"22\"\r\n  }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-get-by-queryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave?soqlWhereClause=Name='Thirupati'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Thirupati'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeName\": \"Sampath\",\r\n  \"employeeId\": \"ES00005\",\r\n  \"leaveBalance\": \"5\",\r\n  \"leaveType\": \"casual\",\r\n  \"no.ofLeaves\": \"22\"\r\n  }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave/ES00005",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave",
+								"ES00005"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/leave/ES00004",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"leave",
+								"ES00004"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "resignationDetails",
+			"item": [
+				{
+					"name": "resignationDetails-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeName\": \"Sampath\",\r\n  \"employeeId\": \"ES00005\",\r\n  \"resignationDate\": \"24-08-2024\",\r\n  \"lastWorkingDate\": \"24-11-2024\"\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resignationDetails-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resignationDetails-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails/ES00001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails",
+								"ES00001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resignationDetails-get-by-queryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails?soqlWhereClause=Name='Thirupati'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Thirupati'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resignationDetails-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"employeeName\": \"Sampath\",\r\n  \"employeeId\": \"ES00005\",\r\n  \"resignationDate\": \"24-09-2024\",\r\n  \"lastWorkingDate\": \"24-12-2024\"\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails/ES00005",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails",
+								"ES00005"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resignationDetails-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/resignationDetails/ES00004",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"resignationDetails",
+								"ES00004"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "applicant",
+			"item": [
+				{
+					"name": "applicant-post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"applicantId\": \"ES00005\",\r\n    \"applicantName\": \"Sampath\",\r\n    \"dateOfApplication\": \"10-12-2021\",\r\n    \"jobId\": \"05\",\r\n    \"applicantType\": \"experience\",\r\n    \"locationPreference1\": \"hyderabad\",\r\n    \"locationPreference2\": \"chennai\",\r\n    \"locationPreference3\": \"bengaluru\",\r\n    \"contactNumber\": \"4292003010\",\r\n    \"emailId\": \"sampath@gmail.com\",\r\n    \"currentLocation\": \"hyderabad\",\r\n    \"qualification\": \"B-tech\",\r\n    \"collegeName\": \"NIT\",\r\n    \"passoutYear\": \"2018\",\r\n    \"programmingSkills\": \"java,python\",\r\n    \"experience\": \"3\",\r\n    \"noticePeriod\": \"3months\",\r\n    \"openForRelocation\": \"yes\",\r\n    \"currentSalary\": \"80000\",\r\n    \"expectedSalary\": \"100000\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applicant-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applicant-get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant/ES00002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant",
+								"ES00002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applicant-get-by-queryparams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant?soqlWhereClause=Name='Lakshman'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Lakshman'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applicant-patch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"applicantId\": \"ES00004\",\r\n    \"applicantName\": \"Thirupati\",\r\n    \"dateOfApplication\": \"10-12-2021\",\r\n    \"jobId\": \"04\",\r\n    \"applicantType\": \"experience\",\r\n    \"locationPreference1\": \"hyderabad\",\r\n    \"locationPreference2\": \"chennai\",\r\n    \"locationPreference3\": \"bengaluru\",\r\n    \"contactNumber\": \"5292003010\",\r\n    \"emailId\": \"thirupati@gmail.com\",\r\n    \"currentLocation\": \"hyderabad\",\r\n    \"qualification\": \"B-tech\",\r\n    \"collegeName\": \"NIT\",\r\n    \"passoutYear\": \"2018\",\r\n    \"programmingSkills\": \"java,python\",\r\n    \"experience\": \"3\",\r\n    \"noticePeriod\": \"3months\",\r\n    \"openForRelocation\": \"yes\",\r\n    \"currentSalary\": \"80000\",\r\n    \"expectedSalary\": \"100000\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant/ES00004",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant",
+								"ES00004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "applicant-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/applicant/ES00005",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"applicant",
+								"ES00005"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "announcements",
+			"item": [
+				{
+					"name": "POST-RECORDS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"announcementName\": \"Holidays\",\r\n    \r\n    \r\n    \"announcementDate\": \"Priority\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/announcements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"announcements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GETbyID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/announcements/ES0002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"announcements",
+								"ES0002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-ALL-RECORDS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/announcements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"announcements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE-RECORDS",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/announcements/ES0002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"announcements",
+								"ES0002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"announcementName\": \"Dushera\",\r\n    \"employeeId\": \"75\",\r\n    \r\n    \r\n    \"announcementDate\": \"26th August\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/announcements/75",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"announcements",
+								"75"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manager",
+			"item": [
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"deptId\": \"22\",\r\n    \"managerName\": \"Sampath\",\r\n    \"managerId\": \"25\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/manager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all OR by qParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/manager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GETbyManagerId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/manager/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"manager",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletebymanagerID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/manager/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"manager",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"deptId\": \"22\",\r\n    \"managerName\": \"Vasanth\",\r\n    \"managerId\": \"25\",\r\n    \"employeeId\": \"77\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/manager/77",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"manager",
+								"77"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "expenses",
+			"item": [
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\r\n    {\r\n        \r\n        \"expensesName\": \"internet\",\r\n        \"employeeId\": \"45\",\r\n        \"expenseType\": \"yes\",\r\n        \"amount\": \"123\",\r\n        \"approved\": \"yes\",\r\n        \"status\": \"done\"\r\n    }\r\n]\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetbyID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses/45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRecords",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \r\n    \"employeeId\": \"52\",\r\n    \"projectName\": \"hrms\",\r\n    \"projectDetails\": \"enique hrms prject\",\r\n    \"clientName\": \"shell\",\r\n    \"technology\": \"mule4\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetbyQueryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses?soqlWhereClause=Name='internet'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='internet'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\r\n    {\r\n        \r\n        \"expensesName\": \"Sampath\",\r\n        \"employeeId\": \"85\",\r\n        \"expenseType\": \"yes\",\r\n        \"amount\": \"123\",\r\n        \"approved\": \"yes\",\r\n        \"status\": \"done\"\r\n    }\r\n]\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses/85",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses",
+								"85"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/expenses/45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"expenses",
+								"45"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "project",
+			"item": [
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \r\n    \"employeeId\": \"52\",\r\n    \"projectName\": \"hrms\",\r\n    \"projectDetails\": \"enique hrms prject\",\r\n    \"clientName\": \"shell\",\r\n    \"technology\": \"mule4\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllRecords",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletebyId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/project/ES0001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"project",
+								"ES0001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetbyName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/project/52",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"project",
+								"52"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \r\n    \"employeeId\": \"52\",\r\n    \"projectName\": \"Enique\",\r\n    \"projectDetails\": \"hrms project\",\r\n    \"clientName\": \"shell\",\r\n    \"technology\": \"mule4\"\r\n    }]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/project/52",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"project",
+								"52"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "department",
+			"item": [
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"23\",\r\n        \"deptId\": \"56\",\r\n        \"deptName\": \"HR\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRecords",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"23\",\r\n        \"deptId\": \"56\",\r\n        \"deptName\": \"HR\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByEmployeeId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"23\",\r\n        \"deptId\": \"56\",\r\n        \"deptName\": \"HR\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department/23",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteByemployeeId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"23\",\r\n        \"deptId\": \"56\",\r\n        \"deptName\": \"HR\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department/23",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"24\",\r\n        \"deptId\": \"7\",\r\n        \"deptName\": \"Security\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department/24",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department",
+								"24"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecordsbyQueryParams",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"employeeId\": \"23\",\r\n        \"deptId\": \"56\",\r\n        \"deptName\": \"HR\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/department?soqlWhereClause=Name='HR'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"department"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='HR'"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employee",
+			"item": [
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n     \"employeeId\": \"29\",\r\n     \"employeeName\": \"Sampath\",\r\n     \"dateOfBirth\": \"28th June\",\r\n     \"dateOfJoining\": \"14th August\",\r\n     \"nickName\": \"Sam\",\r\n     \"gender\": \"Male\",\r\n     \"country\": \"India\",\r\n     \"state\": \"telanagana\",\r\n     \"language\": \"Telugu\",\r\n     \"emailId\": \"sampathreddyjr@gmail.com\",\r\n     \"mobileNumber\": \"9133973973\",\r\n     \"managerId\": \"59\",\r\n     \"deptId\": \"89\"\r\n\r\n\r\n\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/employee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRecords",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/employee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByQueryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/employee?soqlWhereClause=Name='Sampath'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"employee"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Sampath'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/employee/29",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"employee",
+								"29"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n     \"employeeId\": \"29\",\r\n     \"employeeName\": \"Laxman\",\r\n     \"dateOfBirth\": \"28th June\",\r\n     \"dateOfJoining\": \"14th August\",\r\n     \"nickName\": \"Lux\",\r\n     \"gender\": \"Male\",\r\n     \"country\": \"India\",\r\n     \"state\": \"telanagana\",\r\n     \"language\": \"Telugu\",\r\n     \"emailId\": \"sampathreddyjr@gmail.com\",\r\n     \"mobileNumber\": \"9133973973\",\r\n     \"managerId\": \"59\",\r\n     \"deptId\": \"89\"\r\n\r\n\r\n\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/employee/29",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"employee",
+								"29"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "officeReadiness",
+			"item": [
+				{
+					"name": "GETallRecords",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"officeReadinessName\": \"Returning to Office\",\r\n        \"employeeId\": \"45\",\r\n        \"workMode\": \"Offline\",\r\n        \"workLocation\": \"Hyd\"\r\n\r\n\r\n    }\r\n\r\n    \r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/officeReadiness",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"officeReadiness"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByIDorQueryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/officeReadiness/45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"officeReadiness",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"officeReadinessName\": \"Would like to return to office\",\r\n        \"employeeId\": \"45\",\r\n        \"workMode\": \"Online\",\r\n        \"workLocation\": \"Hyd\"\r\n\r\n\r\n    }\r\n\r\n    \r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/officeReadiness/45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"officeReadiness",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"officeReadinessName\": \"Would like to return to office\",\r\n        \"employeeId\": \"66\",\r\n        \"workMode\": \"Online\",\r\n        \"workLocation\": \"Hyd\"\r\n\r\n\r\n    }\r\n\r\n    \r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/sapi/officeReadiness/66",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"officeReadiness",
+								"66"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "optionalHoliday",
+			"item": [
+				{
+					"name": "optionalHoliday",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{  \"Name\": \"Sam\",\r\n  \"Ramnavmi\": \"22nd june\",\r\n  \"Eid\": \"25th may\",\r\n  \"Christmas_Eve\": \"25 december\",\r\n  \"New_years_Eve\": \"30 dec\",\r\n  \"Lohri\": \"13th jan\"\r\n\r\n}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/sapi/optionalHoliday",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"optionalHoliday"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave-get-all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/sapi/optionalHoliday?soqlWhereClause=Name='Sam'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"optionalHoliday"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Sam'"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upsert",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{  \"Name\": \"Sam\",\r\n  \"Ramnavmi\": \"2nd june\",\r\n  \"Eid\": \"25h may\",\r\n  \"Christmas_Eve\": \"25 december\",\r\n  \"New_years_Eve\": \"30 dec\",\r\n  \"id\": \"25\",\r\n  \"Lohri\": \"1th jan\"\r\n\r\n}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/sapi/optionalHoliday/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"optionalHoliday",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/sapi/optionalHoliday/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"optionalHoliday",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-queryParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/sapi/optionalHoliday?soqlWhereClause=Name='Sam'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"sapi",
+								"optionalHoliday"
+							],
+							"query": [
+								{
+									"key": "soqlWhereClause",
+									"value": "Name='Sam'"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,11 @@
+[
+  {
+  "id": "01",
+  "employeeId": "ES0001",
+  "checkInTime": "9:30 A.M",
+  "checkOutTime": "6:30 P.M",
+  "date": "14-Feb-2022",
+  "totalHoursLogged": "9 Hours",
+  "employeeName": "Lakshman"
+  }
+]

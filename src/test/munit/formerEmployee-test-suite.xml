@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="formerEmployee-test-suite.xml" />
+	<munit:test name="formerEmployee-test-suite-formerEmployee-createFlowTest" doc:id="c6a7b6fb-07f5-4a9a-a3d6-034dc01a2dc8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="38f401b9-341a-4254-ab26-7d7697eb1699" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="55c115c5-477f-4b41-bbdb-c4963eb698e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ca8bf864-08ac-4d28-b9df-828e33f5a1f6" >
+				<munit:payload value="#[readUrl('classpath://formerEmployee/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to formerEmployee-createFlow" doc:id="5964177b-bf11-4758-bcec-14874728b955" name="formerEmployee-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="70b1ae9e-0118-470b-99d2-44450c690c13" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="formerEmployee-test-suite-formerEmployee-getAll" doc:id="0c1f9398-f814-48f7-8f95-c69c859bf9b1" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="6d616601-4ce3-41e2-b2be-9bb1a2594b15" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e7806235-9a8c-47d8-88b3-d1049a0c34b3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to formerEmployee-getFlow" doc:id="dbe0a4a8-04d0-4ce5-b2e0-07d9c1ef7ad6" name="formerEmployee-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="37d18c41-30f1-4f67-b9eb-d79ef9cf2968" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="formerEmployee-test-suite-formerEmployee-getByQueryParams" doc:id="d72cc11e-cd39-43b3-8a8e-d09d06394367" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cdd3993c-8b26-4086-9211-324516add6b6" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="8e61fd96-6efd-4005-b1dc-646389eb452b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/get-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="5e19e5ab-c9f8-492d-bef0-a0e12fde0c93" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Lakshman'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to formerEmployee-getFlow" doc:id="b87b3ece-b9cf-459b-b823-2bbf7c4393d1" name="formerEmployee-getFlow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c8fee521-875f-41ae-b863-3923d9aa94c9" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="formerEmployee-test-suite-formerEmployee-getbyidFlowTest" doc:id="f5fe1a2e-c71e-493c-bb04-b2e5a832e348" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="103b981b-231b-49fe-a20e-2776fa133c17" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1a0a7b90-f197-43fd-8134-7ef59a77688a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="85a2f850-6394-4302-b69b-3003e824e469" >
+				<munit:attributes value="#[{uriParams:{id: 'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to formerEmployee-getbyidFlow" doc:id="96786742-fd91-4f6a-a9d9-e268454d821f" name="formerEmployee-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2a74bc28-a1fa-408c-9dd7-2564af7afd03" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="formerEmployee-test-suite-formerEmployee-deleteFlow3Test" doc:id="2de98db4-14fc-4dc6-8762-3d7448bc459c" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="682a991a-ffc0-4c25-a5b1-46aafabde2c8" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="141f5a02-744f-4f67-b2ee-6b49c2e487df" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e08701de-03a9-45a8-97be-ea00ea645e5a" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c6d02f6d-0bd0-4f02-b1b3-22390c69e887" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="32420bf1-327b-4707-bc2c-28ac7ef44b71" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to formerEmployee-deleteFlow3" doc:id="9862602c-6f1a-4f9b-917d-b0ec21253559" name="formerEmployee-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="e5ffe0e4-267a-44e1-a2ad-c27086edd307" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="formerEmployee-test-suite-formerEmployee-upsertFlowTest" doc:id="86095396-694e-43f4-876f-b3e1466eedd0" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c263b302-4a24-493a-a35a-16e521bc075c" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f246ca26-2062-4476-aaba-b6e944d0e9bc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://formerEmployee/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="29cfcbff-8586-4f2d-b22d-3ada55b67493" >
+				<munit:payload value="#[readUrl('classpath://formerEmployee/for-patch.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to formerEmployee-upsertFlow" doc:id="6e1143e4-aa2e-4a32-a830-88bfcb9a41c7" name="formerEmployee-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7e139ef4-62e6-4b04-9163-5e9e3ad11a18" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

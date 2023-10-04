@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="leave-test-suite.xml" />
+	<munit:test name="leave-test-suite-leave-createFlowTest" doc:id="433219b1-4697-4425-be70-cbb58d1e0ce6" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5e5bf842-e986-4071-825c-bf696ca61375" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="85e25243-077d-45fc-ac5b-6dc2eff8eaad" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="b2a2822f-2e9b-4943-9119-a1b21e7a5fc4" >
+				<munit:payload value="#[readUrl('classpath://leave/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to leave-createFlow" doc:id="9b8c06ca-f800-42f3-9a9c-58d787dae663" name="leave-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="dcd54ccd-f8e4-4fee-a57f-f99504a54c2a" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="leave-test-suite-leave-getAll" doc:id="79f1b510-b637-4a29-81f5-a8243369abf7" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b02ea007-c237-41e1-a479-e00c30bf9ed6" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f91e6ced-ffe0-4804-9905-5331bd8d0a0e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to leave-getFlow" doc:id="f6c95550-6a0e-4e20-85cc-11dea1bb509f" name="leave-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f4cb1077-26d0-4e7d-a7a2-f52052aacff7" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="leave-test-suite-leave-getByQueryParams" doc:id="0e00eb0c-e3a4-40d4-bb64-d84508f849d8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="249c24e2-9de1-4fa8-a208-c7674408a1f8" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="337b10f4-d4d8-4677-b3cf-ec25e119e05f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/get-response.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d2f766fe-42b3-49e4-b4db-7cf467281b0a" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Ishwari1'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to leave-getFlow" doc:id="04d0c3d4-a3df-4a37-a150-e6b43927c039" name="leave-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d1810df4-cddc-4e8d-8961-412594107cc5" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="leave-test-suite-leave-getbyidFlowTest" doc:id="5ffd2ae0-bc74-4254-8690-09d0e9eefed5" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9bbe93f6-d4de-456c-8572-be428c53ca11" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4d7ae541-a7f0-4dcb-99c8-36c6e517870a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="536d5a1a-cc46-4919-a006-752d3649ae6d" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to leave-getbyidFlow" doc:id="ef1e2557-46b3-4eab-8076-bf22d350a569" name="leave-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8fd16485-5017-4e07-9b0f-e2ea8e82f086" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="leave-test-suite-leave-deleteFlow3Test" doc:id="7c951605-13d8-4c68-9743-01d21db47d5e" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="54404d25-308e-4d81-af35-9384589b431e" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5f589c6c-9bfa-4032-92a9-14b00b5430bb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/get-response.dwl')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b5277a84-0ec5-4651-ad74-d03a1d8f73a6" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="098bb36c-c328-4635-ae67-f6e6b4be109d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ac8e6271-4bca-4ec3-b32d-ec7ff5c36eb4" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to leave-deleteFlow3" doc:id="d4396201-2646-465a-8c5e-60e32a3c4310" name="leave-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="86de53e6-aae4-4dde-96af-b144728c3fd7" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="leave-test-suite-leave-upsertFlowTest" doc:id="e317426a-b5a6-47e0-a085-8c5283999331" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="4d0199fd-72a4-4de5-992e-f936b0d45223" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f71fe497-6073-4e1f-90fa-eee8f6c96661" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://leave/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="6e6e0c47-66be-46e1-af87-bc17667bb0df" >
+				<munit:payload value="#[readUrl('classpath://leave/for-patch.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to leave-upsertFlow" doc:id="d9f7bd37-98d7-410b-88dc-27e0c7e34f9e" name="leave-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="5c269a23-de3e-4b54-abd5-e4c56f318956" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

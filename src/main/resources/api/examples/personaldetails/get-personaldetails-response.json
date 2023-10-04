@@ -1,0 +1,16 @@
+[
+  {
+  "id": "01",
+  "employeeId": "ES0001",
+  "name": "Lakshman",
+  "education": "B-Tech",
+  "maritalStatus": "single",
+  "aadharId": "936034047654",
+  "panNumber": "1234567",
+  "fatherName": "Rakshaka",  
+  "fatherMobileNumber": "9666191976",
+  "email": "asamohanlakshman@gmail.com",
+  "dateOfMarriage": "10-12-2024"
+  }
+]
+  

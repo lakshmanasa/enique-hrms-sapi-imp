@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<flow name="POST-Applicant" doc:id="5b81cab6-b32d-47cb-8d9b-1ee25f294fc9" >
+		<ee:transform doc:name="Transform Message" doc:id="d27ec821-9a59-497b-8423-5c2de5c66e0e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map(a,b) -> {
+	Name: a.applicantName,
+	applicantId__c: a.applicantId,
+	dateOfApplication__c: a.dateOfApplication,
+	jobId__c: a.jobId,
+	applicantType__c: a.applicantType,
+	applicationStatus__c: a.applicantStatus,
+	onlineTestStatus__c: a.onlineTestStatus,
+	onlineTestEvaluation__c: a.onlineTestEvaluation,
+	score__c: a.score,
+	locationPreference1__c: a.locationPreference1,
+	locationPreference2__c: a.locationPreference2,
+	locationPreference3__c: a.locationPreference3,
+	contactNumber__c: a.contactNumber,
+	emailId__c: a.emailId,
+	currentLocation__c: a.currentLocation,
+	qualification__c: a.qualification,
+	collegeName__c: a.collegeName,
+	passOutYear__c: a.passOutYear,
+	programmingSkills__c: a.programmingSkills,
+	experience__c: a.experience,
+	designation__c: a.designation,
+	expInCC__c: a.expInCC,
+	noticePeriod__c: a.noticePeriod,
+	openForRelocation__c: a.openForRelocation,
+	currentSalary__c: a.currentSalary,
+	expectedSalary__c: a.expectedSalary,
+	currentRound__c: a.currentRound,
+	interviewPanelist__c: a.interviewPanelist,
+	comments__c: a.comments
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Uploading Record" doc:id="f13f9d97-d31b-428f-bd71-dd0cc67dbded" config-ref="Salesforce_Config1" type="applicant__c"/>
+		<ee:transform doc:name="JAVA to JSON" doc:id="939cd0ea-5761-494f-bc50-55cc606546cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="DELETE-Applicants" doc:id="9e55dabc-0758-4c52-ad6e-8e7217f47e4f" initialState="started">
+		<salesforce:query doc:name="Fetching Records" doc:id="40276e5f-6889-4efd-b559-3845cbe5990c" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT Id,applicantType__c,applicationStatus__c,collegeName__c,comments__c,contactNumber__c,currentLocation__c,currentRound__c,currentSalary__c,dateOfApplication__c,designation__c,emailId__c,expectedSalary__c,experience__c,expInCC__c,applicantId__c,interviewPanelist__c,jobId__c,locationPreference1__c,locationPreference2__c,locationPreference3__c,noticePeriod__c,onlineTestEvaluation__c,onlineTestStatus__c,openForRelocation__c,passOutYear__c,programmingSkills__c,qualification__c,score__c FROM Applicant__c WHERE applicantId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="Filtering payload and sending only ID" doc:id="9b5a94a5-4748-4f34-b18f-d888c14a6016" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.Id]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:delete doc:name="Deleting Records" doc:id="7169b5b9-afd1-41a7-94d3-84a8c3a099e3" config-ref="Salesforce_Config1">
+		</salesforce:delete>
+		<ee:transform doc:name="JAVA to JSON" doc:id="966f6e81-d726-4c30-89ea-22e59fb2cc13" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="applicant-get-all-details-or-get-by-queryparameter" doc:id="4de78e54-e267-4504-b933-6affd75768e2" >
+		<choice doc:name="Choice" doc:id="e3fdb60e-9d6a-4973-b549-1e54526f4e18" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the details from salesforce" doc:id="8e9e8559-269d-4f19-9125-80c74538f56c">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT applicantType__c,Name,collegeName__c,applicantId__c,contactNumber__c,currentLocation__c,Id,emailId__c,applicationStatus__c,dateOfBirth__c,experience__c,qualification__c FROM Applicant__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}
+	]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="7e3cfd96-00ee-4c9d-882b-ca5e821c6643" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+		</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="5e9bb423-750c-4200-a55d-2b9997f7c052" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT applicantType__c,collegeName__c,Id,applicantId__c,Name,contactNumber__c,currentLocation__c,emailId__c FROM Applicant__c ]]></salesforce:salesforce-query>
+				</salesforce:query>
+			
+</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="be63229d-f144-450b-978a-7b236ab06e38" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="applicant-get-by-id" doc:id="6ad8996c-70e8-4a53-8d2e-ad71de72aba8" >
+		<salesforce:query doc:name="Fecthing the records using UriParameter" doc:id="b05d0a27-df75-4e5a-9c53-3ce1b9aed875" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query><![CDATA[SELECT applicantType__c,Name,collegeName__c,applicantId__c,contactNumber__c,currentLocation__c,Id,emailId__c FROM Applicant__c WHERE applicantId__c =':id']]></salesforce:salesforce-query>
+					<salesforce:parameters><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+				</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="51f29b28-10f8-44e0-b391-f07aa264ed5c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="applicant-update-by-id" doc:id="8cc2fa69-b308-4de0-ae93-897cf058d0cf" >
+		<ee:transform doc:name="Sending details into salesforce object" doc:id="245335bc-1bc5-4f68-9824-785a2b0a0845" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map(a,b) ->{
+	Name: a.applicantName,
+	applicantId__c: a.applicantId,
+	dateOfApplication__c: a.dateOfApplication,
+	jobId__c: a.jobId,
+	applicantType__c: a.applicantType,
+	applicationStatus__c: a.applicantStatus,
+	onlineTestStatus__c: a.onlineTestStatus,
+	onlineTestEvaluation__c: a.onlineTestEvaluation,
+	score__c: a.score,
+	locationPreference1__c: a.locationPreference1,
+	locationPreference2__c: a.locationPreference2,
+	locationPreference3__c: a.locationPreference3,
+	contactNumber__c: a.contactNumber,
+	emailId__c: a.emailId,
+	currentLocation__c: a.currentLocation,
+	qualification__c: a.qualification,
+	collegeName__c: a.collegeName,
+	passOutYear__c: a.passOutYear,
+	programmingSkills__c: a.programmingSkills,
+	experience__c: a.experience,
+	designation__c: a.designation,
+	expInCC__c: a.expInCC,
+	noticePeriod__c: a.noticePeriod,
+	openForRelocation__c: a.openForRelocation,
+	currentSalary__c: a.currentSalary,
+	expectedSalary__c: a.expectedSalary,
+	currentRound__c: a.currentRound,
+	interviewPanelist__c: a.interviewPanelist,
+	comments__c: a.comments
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="c7175738-9630-45c0-8345-68c59c1378ec" objectType="applicant__c" config-ref="Salesforce_Config1" externalIdFieldName="applicantId__c"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="daffefc9-f7ec-46c0-9283-b0cfc234925f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

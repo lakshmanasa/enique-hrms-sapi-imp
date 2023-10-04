@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="compensation-test-suite.xml" />
+	<munit:test name="compensation-test-suite-compensation-createFlowTest-post" doc:id="74ff3ea6-ba78-4592-b625-961018cf8121" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e282c283-0014-4ac2-8f88-46ab3488c7aa" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b6909471-a598-4ee7-a583-0a50812cdd85" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/for-response.dwl')]" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="6547c79d-9599-4cac-a020-3d1dd71938f3" >
+				<munit:payload value="#[readUrl('classpath://compensation/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to compensation-createFlow" doc:id="99553602-95b1-4985-8e88-aac9626358dc" name="compensation-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7c6ab5f4-fa58-4e14-916b-bd2835adae98" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="compensation-test-suite-compensation-getAll" doc:id="50491676-ba74-4637-b46e-61ff53238597" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="d7791086-4537-4f87-bb19-d15468bf4b92" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4c5acc9c-9b83-4626-b351-8e743e6b78f1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/get-response.dwl')]" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow-ref to compensation-getFlow" doc:id="52caaef7-ee58-4ac0-94bc-74ac1fd9bee9" name="compensation-getFlow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c666df1d-b471-4d22-a761-7357f98b607a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="compensation-test-suite-compensation-getbyqueryParams" doc:id="9c53a0ea-821c-4f55-a3d7-f3d3a166de16" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5a6d2e52-72b7-4497-98da-0c089535c23d" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="03578454-9833-48f3-be58-f1549e96ad55" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/get-response.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="89ceb53c-ceba-4684-8df6-9a44e9de4a5c" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Sudhakar'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to compensation-getFlow" doc:id="814fc1bf-7fea-483c-9c9f-8ad7e4af64af" name="compensation-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="415f1800-c0f9-4a47-afd2-985915975bb2" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="compensation-test-suite-compensation-getByuriParams" doc:id="79cb452d-0642-4fa6-8130-1c4f26ccd919" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2200e58a-68d0-4d98-b4f5-dcccc8b1f862" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f52d75a2-c23b-4e08-9e1a-7be121fe6171" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/get-response.dwl')]" encoding="UTF-8" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="5d42e248-04d7-4211-8b90-a1159d2c8924" >
+				<munit:attributes value="#[{uriParams:{id:'ES00128'}}]" />
+
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to compensation-getFlow" doc:id="254d946e-dda6-417a-8850-d85da2ac955c" name="compensation-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="548f8f85-0a3b-4400-bed4-fed7ce056aad" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="compensation-test-suite-compensation-deleteFlow3Test" doc:id="80a4a375-5e97-4e2a-89ab-750fba841577" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9d39374c-0d59-448e-b43b-45a94ff2e32d" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b80fa371-9736-43f0-b0c8-ce9e03734375" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/get-response.dwl')]" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="d25a7600-7966-4fe2-91a2-98b4778d05cb" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c922d25b-bb59-4e97-b295-fe9e09d0cada" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/for-response.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ecb2f018-a978-4064-8838-a65a5a3ec4b1" >
+				<munit:attributes value="#[{uriParams:{id:'ES00129'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to compensation-deleteFlow3" doc:id="d39ecf81-37df-42f8-85d5-c47f7974cb2a" name="compensation-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="aa4f93dc-7bb1-42c6-a2ed-7a98cf7e5c0e" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="compensation-test-suite-compensation-upsertFlowTest" doc:id="53f9ef43-ae1f-4e35-8910-3c5cfa17a42e" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="80819145-605f-446d-a04c-f381c254a6d2" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1346d7b4-d4a9-4c6b-a22e-db1d2e576bab" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://compensation/for-response.dwl')]" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="28e0cb78-1555-4798-aa7d-005bcc5d9e9f" >
+				<munit:payload value="#[readUrl('classpath://compensation/for-patch.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to compensation-upsertFlow" doc:id="841c4db8-c8ef-4940-9420-84e04859270d" name="compensation-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="42136c1c-8152-4532-aeb2-015f30363f67" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	
+
+
+</mule>

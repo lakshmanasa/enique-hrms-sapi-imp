@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="compensation-createFlow" doc:id="3f829b2a-f31d-4d5c-bff3-640b23f91913" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="ecaab66c-75a3-4799-a8c8-1f1564bc37a1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	bonus__c: $.bonus,
+	employeeId__c: $.employeeId,
+	hike__c: $.hike,
+	id__c: $.id,
+	Name: $.employeeName,
+	yearly__c: $.yearly,
+	salary__c: $.salary,
+	variablePay__c: $.variablePay,
+	year__c: $.year
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="compensation__c" doc:name="Creating records" doc:id="b6909471-a598-4ee7-a583-0a50812cdd85" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="17ebcff4-23f3-4b19-910b-20342c0fe60f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="compensation-getFlow" doc:id="a0b42e0e-5d20-43dd-b2e1-268e8dcb1875" >
+		<choice doc:name="Choice" doc:id="04401fc5-68db-40c1-b9b3-3885ab0c8572" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the details from salesforce" doc:id="15b0c309-cfef-4c2e-ba98-65da8acb4759">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT bonus__c,employeeId__c,hike__c,Id,id__c,Name,yearly__c,salary__c,variablePay__c,year__c FROM compensation__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="03578454-9833-48f3-be58-f1549e96ad55" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="4c5acc9c-9b83-4626-b351-8e743e6b78f1" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT bonus__c,employeeId__c,hike__c,Id,id__c,Name,yearly__c,salary__c,variablePay__c,year__c FROM compensation__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			
+</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="88f241d2-ebd5-4fa6-a4c1-b1feec1df1d8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="compensation-getbyidFlow" doc:id="583bfd4b-b65a-4e80-aea6-37e0c5902142" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="f52d75a2-c23b-4e08-9e1a-7be121fe6171" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT bonus__c,employeeId__c,hike__c,Id,id__c,Name,yearly__c,salary__c,variablePay__c,year__c FROM compensation__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="e29db773-b2c8-4534-a500-ffff66c8a374" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="compensation-deleteFlow3" doc:id="3772ef41-2df1-4a5c-9856-3cd1fef95c09" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="b80fa371-9736-43f0-b0c8-ce9e03734375" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT bonus__c,employeeId__c,hike__c,Id,id__c,Name,yearly__c,salary__c,variablePay__c,year__c FROM compensation__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Deleting Records" doc:id="c922d25b-bb59-4e97-b295-fe9e09d0cada" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="9d496768-7511-4838-838a-56bf6e101012" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="compensation-upsertFlow" doc:id="3d4aaab0-13af-41e1-995a-ff19b688831f" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="1701e010-a303-490e-9062-f320c8f21657" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	bonus__c: $.bonus,
+	employeeId__c: $.employeeId,
+	hike__c: $.hike,
+	id__c: $.id,
+	Name: $.employeeName,
+	yearly__c: $.yearly,
+	salary__c: $.salary,
+	variablePay__c: $.variablePay,
+	year__c: $.year
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="1346d7b4-d4a9-4c6b-a22e-db1d2e576bab" objectType="compensation__c" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="a4dfa22b-afb4-4abf-98b3-b60dfcadeb34" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

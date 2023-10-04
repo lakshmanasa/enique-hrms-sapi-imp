@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_891b7477_15a6_4212_800f_69eb801c0c2f_Input_Payload = Array<{  announcementName: String,   announcementDate: String,   id?: String,   _?: Any}>
+

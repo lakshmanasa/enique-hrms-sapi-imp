@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="globalErrorHandlerError_Handler" doc:id="f98541b9-f3b0-44dc-8e32-1dc56c5be321" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b19a294a-ad10-4c7d-a8e4-e52db51ebb4e" type="CONNECTIVITY">
+			<set-variable value="504" doc:name="ERROR 504" doc:id="4307a46f-c26b-46b6-96cd-8c5a0f4ea1db" variableName="httpStatus"/>
+			<flow-ref doc:name="Referring common error handler flow" doc:id="a84f6391-d5ca-49e4-aea1-d6fcb04e938a" name="commonErrorHandlerFlow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4ff66ba2-77b0-4abd-b25e-b301ebf0316d" type="MULE:CLIENT_SECURITY">
+			<set-variable value="500" doc:name="ERROR 500" doc:id="9e148ccc-0a00-4405-b42d-fc3f4af3598e" variableName="httpStatus"/>
+			<flow-ref doc:name="Referring common error handler flow" doc:id="7667565d-92df-4ee9-89a4-a91e544e2489" name="commonErrorHandlerFlow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="99249249-ae43-4ad0-833c-e7cf0a31dc67" type="MULE:SERVER_SECURITY">
+			<choice doc:name="Choice" doc:id="577ba554-ce49-4d84-ae9d-093613becd6b" >
+				<when expression="#[error.errorType.identifier == 'UNAUTHORIZED']">
+					<set-variable value="401" doc:name="ERROR 401" doc:id="005b2dd9-4cc7-4c98-bc3f-ec5863fae8ec" variableName="httpStatus" />
+				</when>
+				<otherwise >
+					<set-variable value="403" doc:name="ERROR 403" doc:id="9fdb49f1-b66e-4f2a-9970-9f1ef48e2b4b" variableName="httpStatus"/>
+				</otherwise>
+			</choice>
+			<flow-ref doc:name="Referring common error handler flow" doc:id="32605523-37b4-4259-a9dd-ca65f1a2da4d" name="commonErrorHandlerFlow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="18289d49-b6a1-491e-a6e7-ba0f455fa504" type="ANY" >
+			<choice doc:name="Choice" doc:id="4b6e4895-1c3c-47c3-a503-8427120826ca" >
+				<when expression="#[error.errorType.namespace == 'APIKIT']" >
+					<choice doc:name="Choice" doc:id="551daa16-5ea3-474a-8b48-3a6fd0ef602b" >
+						<when expression="#[error.errorType.identifier == 'BAD_REQUEST']" >
+							<set-variable value="400" doc:name="ERROR 400" doc:id="361ee1c8-2e62-4112-bccf-f1d59c2b6da7" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'NOT_FOUND']" >
+							<set-variable value="404" doc:name="ERROR 404" doc:id="8edb225b-3f2d-4809-ab60-d8842787c78b" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'METHOD_NOT_ALLOWED']" >
+							<set-variable value="405" doc:name="ERROR 405" doc:id="d0ee0952-2c59-470b-b1c9-b769e4d059cf" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'NOT_ACCEPTABLE']" >
+							<set-variable value="406" doc:name="ERROR 406" doc:id="a96a8756-2f13-4c59-ad01-b1245a5c104d" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'UNSUPPORTED_MEDIA_TYPE']" >
+							<set-variable value="415" doc:name="ERROR 415" doc:id="2aa252bc-fa36-490e-9d6d-aa10a5e38de0" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'UNAUTHORIZED']" >
+							<set-variable value="401" doc:name="ERROR 401" doc:id="ed7eeb2e-7daf-4415-b509-f1eb15dc5a03" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'FORBIDDEN']" >
+							<set-variable value="403" doc:name="ERROR 403" doc:id="82d5eea5-7067-4616-b310-6b67e2997799" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'REQUEST_TIMEOUT']" >
+							<set-variable value="408" doc:name="ERROR 408" doc:id="21a0d74c-7a32-4e69-a07f-4c830e0c15b4" variableName="httpStaus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'TOO_MANY_REQUESTS']" >
+							<set-variable value="429" doc:name="ERROR 429" doc:id="e55f2269-cdd3-4192-bdf4-57b9cc537249" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'NOT_IMPLEMENTED']" >
+							<set-variable value="501" doc:name="ERROR 501" doc:id="a86f0bc3-9519-46e7-833e-d46544ae21c0" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'BAD_GATEWAY']" >
+							<set-variable value="502" doc:name="ERROR 502" doc:id="f9cf432d-80d0-4f8c-99e5-ecd81f08fb8e" variableName="httpStatus" />
+						</when>
+						<when expression="#[error.errorType.identifier == 'SERVICE_UNAVAILABLE']" >
+							<set-variable value="503" doc:name="ERROR 503" doc:id="27a4ff20-b300-4203-a9b7-4796151a8628" variableName="httpStatus" />
+						</when>
+					</choice>
+				</when>
+				<otherwise >
+					<set-variable value="500" doc:name="DEFAULT ERROR 500" doc:id="ff00a29d-57b1-4362-86b3-820270a68f69" variableName="httpStatus" />
+				</otherwise>
+			</choice>
+			<logger level="INFO" doc:name="Logger" doc:id="a77508d6-7bc0-415c-bdfb-d218718aa137" message="#[vars.httpStatus]" />
+			<flow-ref doc:name="Referring common error handler flow" doc:id="7a968ad0-a451-4ac0-b56b-031f01b99784" name="commonErrorHandlerFlow" />
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="commonErrorHandlerFlow" doc:id="059f6226-20ef-415f-945e-d510c9c2b998" >
+		<ee:transform doc:name="Transform Message" doc:id="637923c2-0d18-43b0-aebe-7f5ac80ddf55">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"httpResponseCode": vars.httpStatus,
+	"errorType": error.errorType.identifier,
+	"errorMessage": error.description
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Loggers" doc:id="3649fde0-a12c-43c0-ada8-fdbb0f72ca07" message='#[payload ++ {"status": "ERROR"}]' />
+	</sub-flow>
+</mule>

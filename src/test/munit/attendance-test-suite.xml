@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="attendance-test-suite.xml" />
+	<munit:test name="attendance-test-suite-attendance-createFlowTest" doc:id="307f7db6-a12f-4722-8e75-cf9ed66ab131" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="41fc6fca-796c-4388-b795-bf3ee167b20d" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cbb0ffd0-2f69-4afe-b12e-091e5fbad594" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="dc135bab-ee5f-4107-ab35-eeb78240a070" >
+				<munit:payload value="#[readUrl('classpath://attendance/for-post.dwl')]" encoding="UTF-8" />
+				<munit:attributes value='#[[&#10;  {&#10;  "employeeName": "Lakshman",&#10;  "employeeId": "ES00100",&#10;  "checkInTime": "9:30 A.M",&#10;  "checkOutTime": "6:30 P.M",&#10;  "date": "07-Mar-2022",&#10;  "totalHoursLogged": "9 Hours"&#10;  }&#10;] ]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to attendance-createFlow" doc:id="21ab135f-2a6e-428f-8b81-320ef78527d5" name="attendance-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="aac1f49f-5eae-4b51-b7f7-1d189d44e333" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="attendance-test-suite-attendance-getAll" doc:id="6f866db7-0ad7-4f41-8f30-446230da79d5" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e6638ec3-31eb-4588-be30-e20ab4a32bbf" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a1d52b94-bbcb-453d-b9fd-a2b999dc0c69" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to attendance-getFlow" doc:id="48c2d799-e6df-4dc2-a91e-c4ce684adaf6" name="attendance-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="46b21ea5-5c1c-499d-a344-eb6ec674116f" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="attendance-test-suite-attendance-getByQueryParams" doc:id="92c343a7-ae52-4846-8d3c-c989777ac0d7" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3df5503e-7c38-4885-b4b4-93dbb2b7a618" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="62ea2e33-3c26-4496-9947-f06b3070c9a5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="4b9eeb67-b623-49df-9115-84a3a4530acc" >
+				<munit:payload encoding="UTF-8" />
+				<munit:attributes value="#[{queryParams:{soqlWhereClause: &quot;employeeId__c='ES00001'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to attendance-getFlow" doc:id="466e9540-801e-4844-a439-de45f9a59b7e" name="attendance-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="ddd11fc8-e0a2-4be3-875b-ca4431138679" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="attendance-test-suite-attendance-getbyidFlowTest" doc:id="fe0b34d0-1071-4dc7-bf90-10524d849fe4" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b7db0f6c-b4a9-4fab-ae7c-7bc89eb37b5b" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="baaaa429-b90f-47d9-ae5f-1ebf023fcf20" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="968db714-54a6-4909-bf81-787f3000e810" >
+				<munit:attributes value="#[{uriParams:{id: 'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to attendance-getbyidFlow" doc:id="66e506e5-8d2d-4e81-ae60-ca6e3ddc2c3f" name="attendance-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="67b69b43-7331-4644-8709-e15762564569" actual="#[payload]" expected="#[readUrl('classpath://attendance/get-response.dwl')]" message='#["payload is not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="attendance-test-suite-attendance-deleteFlow3Test" doc:id="08e90944-7505-4cbe-9e76-ade2b039d9b4" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="af40fb78-4dde-45a2-94c4-1849209af82f" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a79325f1-0cc9-4b12-93a9-8ee9e7c80c5c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="89f02c84-b920-4a46-ab33-7d39e81dcdaf" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ea899e4a-c3bc-4835-bc74-ea8db8f5adb1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="86a17973-854d-481b-8dc7-a1f7b6037730" >
+				<munit:attributes value="#[{uriParams:{id: 'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to attendance-deleteFlow3" doc:id="a8df5f57-ecc8-4614-a938-8112f55d2b76" name="attendance-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d6ec8b3b-9158-4ce5-b591-8bb0183656a6" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="attendance-test-suite-attendance-upsertFlowTest" doc:id="32798a95-4ba1-4dcb-adde-024e93760f79" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="253adadc-d029-4b2e-a8bd-74f4609f9352" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b32f0ca5-202a-44e1-8ddd-1d72a16bfd32" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://attendance/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="f17ce645-d656-4130-b4fa-90db6988f156" >
+				<munit:payload value="#[readUrl('classpath://attendance/for-patch.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to attendance-upsertFlow" doc:id="d3ecc291-ec1e-4d80-aff2-d022770d82eb" name="attendance-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="4f33bdb5-f003-443c-b8b5-c04def0723d3" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

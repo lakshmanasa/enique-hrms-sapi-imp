@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="optionalHoliday-test-suite.xml" />
+	<munit:test name="optionalHoliday-test-suite-optionalHoliday-postFlowTest" doc:id="5f7782fd-d1b8-4543-886c-e2589714a4ac" description="Test">
+		
+		
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2a847a38-e2c0-4ecf-8638-0cdda6a9346d" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1a4f7798-2ce3-4f15-a1c7-85bb30475f35" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/afterPost.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="36c86f2c-98f6-4619-9c3c-3df8105cb2f4">
+				<munit:payload value="#[readUrl('classpath://optionalHoliday/post-body.dwl')]" encoding="UTF-8" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to optionalHoliday-postFlow" doc:id="df8bb2fd-8832-4dce-aca8-a25a391ce6e7" name="optionalHoliday-postFlow"/>
+		</munit:execution>
+		
+		
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="873fdb2d-37f2-4df4-9bbd-72c26c904d7c" actual="#[payload]" expected="#[readUrl('classpath://optionalHoliday/afterPost.dwl')]" message='#["payloads do not match"]'/>
+			<logger level="INFO" doc:name="Logger" doc:id="2c021f61-d77a-44e3-8207-9a6b65321234" message="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="optionalHoliday-test-suite-optionalHoliday-get-all-details-or-get-by-queryparameterTest" doc:id="65131d17-555f-42d9-8be8-aaa9388ecb98" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3ac909e5-773e-40b9-94e7-2995d35bf49a" processor="salesforce:query">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="3af1fd7b-432a-4d3b-bad7-db9293227afa" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/queryInDelete.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="24698095-43fd-4dd9-9c8f-47a99c0ada59" >
+				<munit:attributes value="#[ { &quot;queryParams&quot;:{&quot;soqlWhereClause&quot;: &quot;Name='Sam'&quot;}}]" encoding="UTF-8" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to optionalHoliday-get-all-details-or-get-by-queryparameter" doc:id="470dbd62-f439-45b7-aa69-aa9c5262fc8a" name="optionalHoliday-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="416ad520-57cf-4ed0-9bbf-a1a300659b6a" actual="#[payload]" expected="#[readUrl('classpath://optionalHoliday/queryInDelete.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="optionalHoliday-test-suite-optionalHoliday-delete-FlowTest" doc:id="75ad15a1-4419-4b78-8666-e1d6b6ba22ad" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5267934a-826b-470e-8491-5680640acc39" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="fdefbec9-cf94-40b0-a7cc-ad0957abac5f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/queryInDelete.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="d376e7b3-9c2c-440e-bea0-fcaed9587981" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b03cdd51-ffb0-4100-b567-a8b961879668" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/afterDelete.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="b55a11b5-e3a2-47d5-ab3a-0c2e95f9e3cb" >
+				<munit:attributes value='#[{uriParams : {id: "11"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to optionalHoliday-delete-Flow" doc:id="488debfa-9b23-43fc-95c2-b885022c1dbb" name="optionalHoliday-delete-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="7dc88c23-0702-4ae9-9a01-8c4e2b5e622b" actual="#[payload]" expected="#[readUrl('classpath://optionalHoliday/afterDelete.dwl')]" message='#["Payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="optionalHoliday-test-suite-optionalHoliday-upsert-FlowTest" doc:id="22fd5684-80e4-4fef-abd9-709b362caf11" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cfcf6522-5ac5-49ba-9ab9-1a88409a97b6" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5365575d-7c7f-4cc6-a36d-78afd86fb42b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/afterPost.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="0dbfb57a-bdab-4c40-850c-e1095721dc0b" >
+				<munit:payload value="#[readUrl('classpath://optionalHoliday/post-body.dwl')]" />
+				<munit:attributes value='#[{uriParams : {id: "11"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to optionalHoliday-upsert-Flow" doc:id="413d5e8e-84a9-45d1-af0d-ab9f6d3c3d03" name="optionalHoliday-upsert-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="5c8a5114-dcea-4c54-9624-615813183d82" actual="#[payload]" expected="#[readUrl('classpath://optionalHoliday/afterPost.dwl')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="optionalHoliday-test-suite-optionalHoliday-get-all-details-or-get-by-queryparameterTest1" doc:id="6cfd4097-acdd-4a5c-b652-ff7d6cd7c500" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="76dac1d8-1a6c-4c9c-bd1c-8b931aed5297" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="8ee6c0f0-9464-475f-a7dd-d6a39df3304b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://optionalHoliday/queryInDelete.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="89863388-bd8b-424c-b02a-493067a91818" />
+			<flow-ref doc:name="Flow-ref to optionalHoliday-get-all-details-or-get-by-queryparameter" doc:id="8e93957d-afbc-4359-b553-7bb5bce5f32d" name="optionalHoliday-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="d23e26b9-7f88-451a-bccf-ccde6e222e8a" actual="#[payload]" expected="#[readUrl('classpath://optionalHoliday/queryInDelete.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

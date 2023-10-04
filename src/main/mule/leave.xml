@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="leave-createFlow" doc:id="20cf060b-6896-48e0-accf-44ca0396d623" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="de84a82c-308a-499c-b6d1-1bfa5f71ec4d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	leaveAvailable__c: $.leaveAvailable,
+	leaveBooked__c: $.leaveBooked,
+	leaveid__c: $.leaveid,
+	leaveType__c: $.leaveType,
+	Name: $.employeeName,
+	totalLeaves__c: $.totalLeaves
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="leave__c" doc:name="Create" doc:id="85e25243-077d-45fc-ac5b-6dc2eff8eaad" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="4602f4ee-6f0f-4429-a91d-91e72827be22" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="leave-getFlow" doc:id="b8d6e136-8fbb-4cf6-b61f-eaba98ed3f69" >
+		<choice doc:name="Choice" doc:id="ddd7765e-24f2-4568-aec4-89e4b49715cc" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the record from salesforce" doc:id="1cf958f7-a849-43af-b926-3ced6c84158b">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": " SELECT employeeId__c,Id,leaveAvailable__c,leaveBooked__c,leaveid__c,leaveType__c,Name,totalLeaves__c FROM leave__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="337b10f4-d4d8-4677-b3cf-ec25e119e05f" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="f91e6ced-ffe0-4804-9905-5331bd8d0a0e" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,leaveAvailable__c,leaveBooked__c,leaveid__c,leaveType__c,Name,totalLeaves__c FROM leave__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			
+</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="fda40b03-62a4-447e-9f5a-0a66931c0966" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="leave-getbyidFlow" doc:id="aa296108-edf9-4725-8324-326db958aa48" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="4d7ae541-a7f0-4dcb-99c8-36c6e517870a" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,leaveAvailable__c,leaveBooked__c,leaveid__c,leaveType__c,Name,totalLeaves__c FROM leave__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="570ce3b6-10aa-4cd0-a9a0-38c13cb4adcf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="leave-deleteFlow3" doc:id="34f4ce1e-6118-4b34-867f-53131cc37dc8" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="5f589c6c-9bfa-4032-92a9-14b00b5430bb" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,leaveAvailable__c,leaveBooked__c,leaveid__c,leaveType__c,Name,totalLeaves__c FROM leave__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Delete" doc:id="098bb36c-c328-4635-ae67-f6e6b4be109d" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="e433f149-b2b6-4a69-8b27-49983d732dba" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="leave-upsertFlow" doc:id="d90793a3-d30f-4916-ab70-f26e80e2f3f9" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="e6ec1d82-c049-4ed7-9af8-3a54e486c856" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	leaveAvailable__c: $.leaveAvailable,
+	leaveBooked__c: $.leaveBooked,
+	leaveid__c: $.leaveid,
+	leaveType__c: $.leaveType,
+	Name: $.employeeName,
+	totalLeaves__c: $.totalLeaves
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="f71fe497-6073-4e1f-90fa-eee8f6c96661" objectType="leave__c" externalIdFieldName="leaveid__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="cdc184d3-2492-4b9d-886a-d8d47dd12cb7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

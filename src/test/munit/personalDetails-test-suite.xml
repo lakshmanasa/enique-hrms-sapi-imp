@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="personalDetails-test-suite.xml" />
+	<munit:test name="personalDetails-test-suite-personalDetails-createFlowTest" doc:id="437e2f47-2c94-4e75-8d3c-0237e0c94d0b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="d55b1716-3471-4c26-b614-3b4d035351d9" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c55248da-de4d-4ca5-8a49-0617c1fb712e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ba67f06b-4daf-4a08-9700-19a9a019d2e6" >
+				<munit:payload value="#[readUrl('classpath://personalDetails/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to personalDetails-createFlow" doc:id="ccfce67c-dee2-476b-9598-8016b485246f" name="personalDetails-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a9ad7334-2ce7-41c1-9b0f-6e94c8a164a3" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="personalDetails-test-suite-personalDetails-getAll" doc:id="86236471-646e-4515-b77a-832d9669c1a2" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="4f7d31f7-6cb4-4d0d-9305-6ef7a8629b0b" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="8ca8f680-873f-4ea2-96c9-de9edd80186a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to personalDetails-getFlow" doc:id="8e5e7f74-8e01-48cc-bd0a-eae52265fa51" name="personalDetails-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="4069e8e1-ddb2-439f-a2d0-6d48f0964389" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="personalDetails-test-suite-personalDetails-getByQueryParams" doc:id="7ec2cca2-cee3-4b1a-940b-ab30848ea402" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="feabb293-6c72-47b1-b9b7-c5a8c17b4aa0" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9bdeef96-234d-4478-b223-478eabfc50e3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/get-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="bf1b84db-4592-4cbd-872d-f82f495bf20d" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Lakshman'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to personalDetails-getFlow" doc:id="418cff1f-2acd-412c-a1da-967192727666" name="personalDetails-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6f9bebdc-bcde-4f8f-acfa-167c4311b764" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="personalDetails-test-suite-personalDetails-getbyidFlowTest" doc:id="52c57333-3d45-496a-986e-882947ae1b77" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="465b934d-17d5-4b4b-992b-e48175eedb3a" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="424ac48b-a537-4094-8655-b5890f23d7ba" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ae2dbc96-7737-487f-809a-f387033f94cc" >
+				<munit:attributes value="#[{uriparams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to personalDetails-getbyidFlow" doc:id="38d271e3-ab03-42f8-b16a-9b3e96930d74" name="personalDetails-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="69d27dd4-d51f-4078-9814-c5a270ff5194" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="personalDetails-test-suite-personalDetails-deleteFlow3Test" doc:id="97211527-db65-482f-aa4f-81f9cc60ba6b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a50483e4-d0c1-4b71-a95a-f879acfbe468" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="424ac48b-a537-4094-8655-b5890f23d7ba" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="91f8708c-183b-4a45-b991-ce8ab44ef88b" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="39fe7134-bb20-4df1-9c37-e000a38ac880" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="0bb46624-cea1-494e-bc99-b24f8d7df262" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to personalDetails-deleteFlow3" doc:id="90228a3b-4c47-44d5-a88f-5da1b55a24d0" name="personalDetails-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="18e29b6d-58ef-48f8-9de8-5676ce3c1a9a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="personalDetails-test-suite-personalDetails-upsertFlowTest" doc:id="ad623f90-a7e3-45a7-8c56-910fbe2d1f0a" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="36bdce09-8585-4ea9-b64b-132a9cf74c83" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="0ca50f1e-6be9-419e-8e7a-dd9f2b59163a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://personalDetails/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ae35ed05-3fc2-4487-99e6-96d406816321" >
+				<munit:payload value="#[readUrl('classpath://personalDetails/for-patch.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to personalDetails-upsertFlow" doc:id="309453ad-b0fa-4f9b-a0e8-1277cc4215d2" name="personalDetails-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="fa7903df-4cf9-4a3c-b726-0169b7c82285" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="resignationDetails-createFlow" doc:id="1a924cce-53ab-4729-af5a-b8ab09bf6d33" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="ec988c7c-a534-45c4-941a-b65c2167e80b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+    Name: $.employeeName,
+	lastWorkingDate__c: $.lastWorkingDate,
+	resignationDate__c: $.resignationDate
+	}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="resignationDetails__c" doc:name="Create" doc:id="455a427c-f00c-4f17-a535-1117296bde84" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="9a8d8f42-5463-4256-869f-55e71283fb19" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="resignationDetails-getFlow" doc:id="a7c8e945-d7d3-4cca-99fa-98445da4bead" >
+		<choice doc:name="Choice" doc:id="03ef03eb-0216-4197-a8ff-21fc705c9d8b" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the record from salesforce" doc:id="0d6f6112-0963-4eff-940a-6b27a593eae9">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT employeeId__c,Id,Name,id__c,lastWorkingDate__c,resignationDate__c FROM resignationDetails__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="e8c04a29-8888-4d9c-9e02-d1dc0f093355" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="776b5516-5ea0-4a35-ab16-7c9a80f62ccd" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,Name,id__c,lastWorkingDate__c,resignationDate__c FROM resignationDetails__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			
+</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="08aabadf-2f55-48e0-bd13-df4445e0b02a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="resignationDetails-getbyidFlow" doc:id="080caea3-6c54-4bdc-8115-b0840c575b7c" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter " doc:id="3f24af8e-597b-4164-b53d-31bec598e087" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,Name,id__c,lastWorkingDate__c,resignationDate__c FROM resignationDetails__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="9509a8b6-6823-473f-bc1a-a9181dc840ea" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="resignationDetails-deleteFlow3" doc:id="115cd80d-b91e-48cf-90e8-75933de78342" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter " doc:id="0cd11610-67b0-4772-9b9a-98a674520fd5" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT employeeId__c,Id,Name,id__c,lastWorkingDate__c,resignationDate__c FROM resignationDetails__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Delete Record" doc:id="1b1cbda0-d157-491f-9cd6-160b09fcea82" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="db8a6004-601c-443f-a416-10d964fc407a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="resignationDetails-upsertFlow" doc:id="37e8bfc5-de5e-41bd-956b-b5baa1e85a77" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="2775ec42-25d5-43f2-b39c-a6f8971fa157" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+    Name: $.employeeName,
+	lastWorkingDate__c: $.lastWorkingDate,
+	resignationDate__c: $.resignationDate
+	}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="3ab33e0d-eec7-4318-a3f2-4507e2689594" objectType="resignationDetails__c" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="c357426a-fdd4-4687-b691-e902dfb169b3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

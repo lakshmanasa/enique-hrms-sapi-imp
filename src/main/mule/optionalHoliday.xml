@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<flow name="optionalHoliday-postFlow" doc:id="94dab55b-9eee-471f-ba0d-d97a569792a0" >
+		<ee:transform doc:name="MAPPING PAYLOAD" doc:id="d0e8f7bf-c028-47c5-96c0-200dce95757a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map (i,e) -> 
+{
+	
+
+	Name: i.Name,
+	Christmas_Eve__c: i.Christmas_Eve,
+	Eid__c: i.Eid,
+	Lohri__c: i.Lohri,
+	New_years_Eve__c:i.New_years_Eve,
+	Ramnavmi__c: i.Ramnavmi,
+	id__c: i.id
+		
+} 
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="optionalHoliday__c" doc:name="Create Record" doc:id="1a4f7798-2ce3-4f15-a1c7-85bb30475f35" config-ref="Salesforce_Config1" />
+		<ee:transform doc:name="JAVA to JSON" doc:id="cd9eb2e0-5e8c-44ba-a076-f93a927ac026" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="optionalHoliday-get-all-details-or-get-by-queryparameter" doc:id="13d6cc00-a77c-4512-a378-a8f78673fe48" >
+		<choice doc:name="Copy_of_Choice" doc:id="de57d478-b571-42d7-8737-0918f31d124a" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]" >
+				<ee:transform doc:name="FORMING a QUERY" doc:id="17e6347a-e00f-4eb6-a2c4-fe34299a7c52" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT Christmas_Eve__c,Eid__c,Lohri__c,New_years_Eve__c,Ramnavmi__c,Name,id__c FROM optionalHoliday__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}
+	]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Query" doc:id="3af1fd7b-432a-4d3b-bad7-db9293227afa" config-ref="Salesforce_Config1" >
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="Query" doc:id="8ee6c0f0-9464-475f-a7dd-d6a39df3304b" config-ref="Salesforce_Config1" >
+					<salesforce:salesforce-query ><![CDATA[SELECT Christmas_Eve__c,Eid__c,Lohri__c,New_years_Eve__c,Ramnavmi__c,Name,id__c FROM optionalHoliday__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="JAVA to JSON" doc:id="5e9112e8-2cdb-43bf-a497-59b8f774009f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="optionalHoliday-delete-Flow" doc:id="accc0dd1-a472-4e4a-ba5d-d3b161ed3631" >
+		<salesforce:query doc:name="Querying all records" doc:id="fdefbec9-cf94-40b0-a7cc-ad0957abac5f" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query><![CDATA[SELECT Christmas_Eve__c,Eid__c,Lohri__c,New_years_Eve__c,Ramnavmi__c,Name,id__c,Id FROM optionalHoliday__c WHERE id__c = ':id'
+]]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		
+</salesforce:query>
+		<salesforce:delete doc:name="Delete by Id" doc:id="b03cdd51-ffb0-4100-b567-a8b961879668" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="JAVA to JSON" doc:id="b6a61969-aeb7-4483-9ef3-deef5479af43">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="optionalHoliday-upsert-Flow" doc:id="917ee36f-07fb-4a72-9326-ac9a1ea549d2" >
+		<ee:transform doc:name="Transform Message" doc:id="1c76f704-eb32-4e20-87bb-f142b727000e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map (i,e) -> 
+{
+	
+
+	Name: i.Name,
+	Christmas_Eve__c: i.Christmas_Eve,
+	Eid__c: i.Eid,
+	Lohri__c: i.Lohri,
+	New_years_Eve__c:i.New_years_Eve,
+	Ramnavmi__c: i.Ramnavmi,
+	id__c: i.id
+		
+} 
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert objectType="optionalHoliday__c" externalIdFieldName="id__c" doc:name="Upsert" doc:id="5365575d-7c7f-4cc6-a36d-78afd86fb42b" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="JAVA to JSON" doc:id="767f7dd9-344b-4e4e-96eb-da7e0db0dec2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="attendance-createFlow" doc:id="31a57aa0-caa2-4cca-b12e-fd2de71b48c0" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="d26ce145-ec8e-4c77-b44b-85240ce446b6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	checkInTime__c: $.checkInTime,
+	checkOutTime__c: $.checkOutTime,
+	date__c: $.date,
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+	Name: $.employeeName,
+	totalHoursLogged__c: $.totalHoursLogged
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="attendance__c" doc:name="sending payload to salesforce" doc:id="cbb0ffd0-2f69-4afe-b12e-091e5fbad594" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="fb7225c9-da2c-43b9-b7d1-4565d914b3ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="attendance-getFlow" doc:id="6be03992-11b8-4bcc-8bcc-98170cced9ee" >
+		<choice doc:name="Choice" doc:id="7966c863-63d6-4b5e-8753-0bbdfe22cf10" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the details from salesforce" doc:id="878ea0e8-bf4a-4b08-8148-1145b637bb05">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"query": "SELECT checkInTime__c,checkOutTime__c,date__c,employeeId__c,Id,id__c,Name,totalHoursLogged__c FROM attendance__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="62ea2e33-3c26-4496-9947-f06b3070c9a5" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="a1d52b94-bbcb-453d-b9fd-a2b999dc0c69" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT checkInTime__c,checkOutTime__c,date__c,employeeId__c,Id,id__c,Name,totalHoursLogged__c FROM attendance__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="fcb5643c-d84f-4f95-8e59-101d1598f59f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="attendance-getbyidFlow" doc:id="0e4ef15d-7bcf-485a-9e23-28a060a41722" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameters" doc:id="baaaa429-b90f-47d9-ae5f-1ebf023fcf20" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT checkInTime__c,checkOutTime__c,date__c,employeeId__c,Id,id__c,Name,totalHoursLogged__c FROM attendance__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="47fae019-fcd2-43fb-8c0b-4131be112a32" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="attendance-deleteFlow3" doc:id="d1a53e71-dd4d-468f-a868-3810ab833829" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="a79325f1-0cc9-4b12-93a9-8ee9e7c80c5c" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT checkInTime__c,checkOutTime__c,date__c,employeeId__c,Id,id__c,Name,totalHoursLogged__c FROM attendance__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Deleting Records" doc:id="ea899e4a-c3bc-4835-bc74-ea8db8f5adb1" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="48d49801-27cb-4d5f-bb95-cde8db162f19" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="attendance-upsertFlow" doc:id="2fbaf571-9bc7-44fd-a183-e1d06a96f302" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="36ae381c-8ae1-4d75-a51e-efe260379cc3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	checkInTime__c: $.checkInTime,
+	checkOutTime__c: $.checkOutTime,
+	date__c: $.date,
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+	Name: $.employeeName,
+	totalHoursLogged__c: $.totalHoursLogged
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="b32f0ca5-202a-44e1-8ddd-1d72a16bfd32" objectType="attendance__c" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="74f8d584-7fd2-4f3b-aac6-066a192bf5cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

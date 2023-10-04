@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="resignationDetails-test-suite.xml" />
+	<munit:test name="resignationDetails-test-suite-resignationDetails-createFlowTest" doc:id="767f01e2-a1a3-494d-9d8f-889f6cc4bbb5" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c64ea79f-d510-42a6-a8d6-b243d64be866" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="455a427c-f00c-4f17-a535-1117296bde84" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="f45c0ea5-7e77-487e-ab15-7d52e1e6cd6f" >
+				<munit:payload value="#[readUrl('classpath://resignationDetails/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to resignationDetails-createFlow" doc:id="e5cc7c7c-b846-46b5-a03b-d7b95234b4ce" name="resignationDetails-createFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7db89dee-e24c-4bab-8c48-eeaf56a383a5" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="resignationDetails-test-suite-resignationDetails-getAll" doc:id="75e9938c-2447-45b4-83e0-8035d9742f10" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="64edb6e0-f3c1-423b-9277-0c21a016ae62" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="776b5516-5ea0-4a35-ab16-7c9a80f62ccd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to resignationDetails-getFlow" doc:id="c0dc78e9-6bfa-4e0d-84d3-811a064c60d0" name="resignationDetails-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7ca8024c-d27b-4671-80d7-d1d6c19ba338" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="resignationDetails-test-suite-resignationDetails-getByQueryParams" doc:id="72e9febb-bfe7-41ef-889c-fe26ebaa7f89" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="1778679d-dfee-4e68-991a-75d5f3e53180" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e8c04a29-8888-4d9c-9e02-d1dc0f093355" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/get-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="03d954fb-3f13-41e4-91d4-62d244a1c5bc" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Lakshman'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to resignationDetails-getFlow" doc:id="03d916ea-1b1d-46f7-b4ab-d7736864ece0" name="resignationDetails-getFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b96087b6-4ec4-4663-ad82-adfa5707c357" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="resignationDetails-test-suite-resignationDetails-getbyidFlowTest" doc:id="e50e8071-3a7e-4b52-90c4-92a80aaac597" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3c96b52a-aff4-4347-9606-1070e89cd93f" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3f24af8e-597b-4164-b53d-31bec598e087" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="bd5a52ec-3a41-4353-87ae-c50e10a185df" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to resignationDetails-getbyidFlow" doc:id="31de244e-c2e8-47b3-aafd-4821853079fc" name="resignationDetails-getbyidFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="39d67222-9437-40ae-82f9-e78b9e88fb93" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="resignationDetails-test-suite-resignationDetails-deleteFlow3Test" doc:id="6fc68b0e-eab1-4d54-85a8-94559fa48f3b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="7efd1245-f3e2-40ee-9bfa-01198a122ef3" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="0cd11610-67b0-4772-9b9a-98a674520fd5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b70c33ed-6002-4904-b42b-095879f21cb3" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1b1cbda0-d157-491f-9cd6-160b09fcea82" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="df2a9134-6d51-4307-b514-ba357fae9462" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to resignationDetails-deleteFlow3" doc:id="868978c0-6b24-40b2-80c6-9962d3790d73" name="resignationDetails-deleteFlow3"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c1c98ae0-13f3-42d9-86ab-4412dc578d35" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="resignationDetails-test-suite-resignationDetails-upsertFlowTest" doc:id="de946b52-c24b-47be-ba08-313abd1d1dbc" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="890d37e2-c572-411c-bbef-05fcdb9b1047" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3ab33e0d-eec7-4318-a3f2-4507e2689594" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://resignationDetails/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="e2b0145b-808d-44a4-b435-b8126e254485" >
+				<munit:payload value="#[readUrl('classpath://resignationDetails/for-post.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to resignationDetails-upsertFlow" doc:id="043c7252-a50d-4b6c-bdd9-c987b366186c" name="resignationDetails-upsertFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a42c1eba-8407-4685-b3aa-c009aa8921d5" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

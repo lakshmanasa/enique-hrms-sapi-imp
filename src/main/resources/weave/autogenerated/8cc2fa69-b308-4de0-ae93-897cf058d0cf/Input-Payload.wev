@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_8cc2fa69_b308_4de0_ae93_897cf058d0cf_Input_Payload = Array<{  currentRound?: String,   currentSalary?: String,   emailId: String,   experience?: String,   interviewPanelist?: String,   score?: String,   applicationStatus?: String,   applicantType: String,   contactNumber: String,   onlineTestEvaluation?: String,   expectedSalary?: String,   applicantId?: String,   comments?: String,   locationPreference1: String,   programmingSkills: String,   locationPreference3: String,   locationPreference2: String,   expInCC?: String,   applicantName: String,   currentLocation: String,   noticePeriod?: String,   jobId: String,   qualification: String,   collegeName: String,   passoutYear: String,   dateOfApplication: String,   openForRelocation: String,   designation?: String,   onlineTestStatus?: String,   _?: Any}>
+

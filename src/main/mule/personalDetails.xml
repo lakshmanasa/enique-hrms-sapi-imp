@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="personalDetails-createFlow" doc:id="cfc8e12f-d39f-4462-84d3-7a706be4748c" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="84b44f61-f113-487c-85c7-027318bffee3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+    Name: $.name,
+    aadharId__c: $.aadharId,
+    education__c: $.education,
+    emailId__c: $.email,
+    fatherMobileNumber__c: $.fatherMobileNumber,
+    fatherName__c: $.fatherName,
+    maritalStatus__c: $.maritalStatus,
+    panNumber__c: $.panNumber,
+    dateOfMarriage__c: $.dateOfMarriage
+	
+	}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="personalDetail__c" doc:name="Creating records" doc:id="c55248da-de4d-4ca5-8a49-0617c1fb712e" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="177c1bc2-b15f-46c1-a17f-bc367fed8c85" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="personalDetails-getFlow" doc:id="2a022097-5ccc-4aa8-92ce-b09d6b8eff56" >
+		<choice doc:name="Choice" doc:id="a19a354f-57ee-48a1-9a14-e707b77e5e9f" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the record from salesforce" doc:id="95ec6d37-68dc-4765-b10a-3dea26657ee9">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT aadharId__c,education__c,emailId__c,employeeId__c,dateOfMarriage__c,fatherMobileNumber__c,fatherName__c,Id,id__c,maritalStatus__c,Name,panNumber__c FROM personalDetail__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="9bdeef96-234d-4478-b223-478eabfc50e3" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise>
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="8ca8f680-873f-4ea2-96c9-de9edd80186a" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT aadharId__c,education__c,emailId__c,employeeId__c,dateOfMarriage__c,fatherMobileNumber__c,fatherName__c,Id,id__c,maritalStatus__c,Name,panNumber__c FROM personalDetail__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+
+			</otherwise>
+		
+</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="14c03502-a790-485b-9756-d3fab5adcfc4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="personalDetails-getbyidFlow" doc:id="e805b7be-2495-4c10-a8bb-461d17316bc9" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="424ac48b-a537-4094-8655-b5890f23d7ba" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT aadharId__c,education__c,emailId__c,employeeId__c,dateOfMarriage__c,fatherMobileNumber__c,fatherName__c,Id,id__c,maritalStatus__c,Name,panNumber__c FROM personalDetail__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="5b5ae8a7-324c-4a87-a0f0-e5091a934b82" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="personalDetails-deleteFlow3" doc:id="b07872ec-5076-4502-a97f-7ece3a2add08" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter" doc:id="9e237461-4004-49bd-8787-b8dac3e4e8a3" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT aadharId__c,education__c,emailId__c,employeeId__c,dateOfMarriage__c,fatherMobileNumber__c,fatherName__c,Id,id__c,maritalStatus__c,Name,panNumber__c FROM personalDetail__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Delete Record" doc:id="39fe7134-bb20-4df1-9c37-e000a38ac880" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="d99f2683-1727-4945-b359-3a97490b6bb7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="personalDetails-upsertFlow" doc:id="86d455f4-1658-4c58-97a9-2db619187d19" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="7842b9cd-f4d6-4363-9597-f1a6d283c32a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	employeeId__c: $.employeeId,
+	id__c: $.id,
+    Name: $.name,
+    aadharId__c: $.aadharId,
+    education__c: $.education,
+    emailId__c: $.emailId,
+    fatherMobileNumber__c: $.fatherMobileNumber,
+    fatherName__c: $.fatherName,
+    maritalStatus__c: $.maritalStatus,
+    panNumber__c: $.panNumber,
+    dateOfMarriage__c: $.dateOfMarriage
+	
+	}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="0ca50f1e-6be9-419e-8e7a-dd9f2b59163a" objectType="personalDetail__c" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="09cb55e1-8419-4101-a95e-064caabe165e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

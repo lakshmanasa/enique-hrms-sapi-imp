@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<flow name="announcements-postFlow" doc:id="5d62807b-2c0d-41fa-8025-a17e53ba699c" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="bf09a8b8-00f9-4795-94ac-743c6ff2209d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map (i,e) -> 
+{
+	
+	id__c: i.id,
+	Name: i.announcementName,
+	announcementDate__c: i.announcementDate,
+	employeeId__c: i.employeeId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="announcement__c" doc:name="Create" doc:id="c85c953f-e74e-4e47-9ede-2fe056ebdb5f" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="Converting JAVA to JSON" doc:id="22524df8-004c-42aa-849b-6d03f8ebd7ca" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="announcements-get-by-id-Flow" doc:id="1f2da36c-edd4-46c4-9515-864dbf7930bd" >
+		<salesforce:query doc:name="Getting by announcementId" doc:id="fce567b5-7f37-4e1a-8f1b-2ba5525ebf58" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT id__c,Id,announcementDate__c,Name,employeeId__c FROM announcement__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	"id" : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="JAVA to JSON" doc:id="34e05517-112a-40de-9163-fac09584fbb3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="announcements-get-all-details-or-get-by-queryparameter" doc:id="594ab83e-98b6-48e2-be0f-b7e03e1f38ce" >
+		<choice doc:name="Choice" doc:id="3ff22c1c-74ee-4414-8fb8-ad65c7fa2fde" >
+			<when expression="attributes.queryParams.soqlWhereClause != null">
+				<ee:transform doc:name="Query to get  data" doc:id="635f68d2-97ad-4f43-8dec-cb57292c2d30" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": "SELECT id__c,Id,Name,announcementDate__c,employeeId__c FROM announcement__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}
+	]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Query" doc:id="71c39ce0-34a7-41a9-ab6c-e02f811650d6" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="Query" doc:id="db175785-7d1d-4a8e-9542-b9ed212e2e21" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT id__c,Id,announcementDate__c,Name,employeeId__c FROM announcement__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="JAVA to JSON" doc:id="7fa63ca1-6d64-4a3b-8df0-c1118998ff9b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="announcements-upsert-Flow" doc:id="891b7477-15a6-4212-800f-69eb801c0c2f" >
+		<ee:transform doc:name="MAPPING incoming PAYLOAD" doc:id="60c3db6a-fcc7-4ce9-a004-3deb38737ee3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map (i,e) -> 
+{
+	
+	id__c: i.id,
+	Name: i.announcementName,
+	announcementDate__c: i.announcementDate,
+	employeeId__c: i.employeeId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert objectType="announcement__c" doc:name="Upserting by id" doc:id="9082d5a8-4559-4e76-a6e8-adb481021c08" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="JAVA to JSON" doc:id="6fca0fea-75d6-4a0a-91da-00e726f7f4df" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="announcements-delete-Flow" doc:id="12cbce3d-f515-4905-bb57-83e2cf2e1be9" >
+		<salesforce:query doc:name="Querying all the records" doc:id="9ff3a39d-25b0-4663-bd4c-b39157f550fe" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT id__c,Id,announcementDate__c,Name,employeeId__c FROM announcement__c WHERE employeeId__c = ':id' ]]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	"id" : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Delete by Id" doc:id="35dbc722-9ab5-46e1-8aa7-e0acc4428c90" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="JAVA to JSON" doc:id="eac07488-9d80-43fa-b69e-48c82df29d7a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

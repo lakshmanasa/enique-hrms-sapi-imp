@@ -1,0 +1,11 @@
+[
+{
+   "id": "1",
+   "projectName": "hrms project",
+   "employeeId": "12",
+   "projectDetails": "about enique hrms project",
+   "clientName": "enique",
+   "technology": "mule4"
+
+}
+]

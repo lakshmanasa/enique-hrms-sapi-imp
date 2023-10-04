@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="formerEmployee-createFlow" doc:id="56f0b33a-a03b-4c85-a6e1-22316dc66e55" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="a5f77463-8e9c-42b0-995b-6b0c0709de22" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+	contactNumber__c: $.contactNumber,
+	dateOfJoined__c: $.dateOfJoined,
+	emailId__c: $.emailId,
+	employeeId__c: $.employeeId,
+	Name:$.employeeName,
+	yearsWorked__c: $.yearsWorked,
+	id__c: $.id,
+	lastWorkingDate__c: $.lastWorkingDate,
+	projectName__c: $.projectName,
+	technology__c: $.technology
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="formerEmployee__c" doc:name="Create" doc:id="55c115c5-477f-4b41-bbdb-c4963eb698e8" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="dbedc3f7-aeae-4efc-b134-59a8c4631cfd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="formerEmployee-getFlow" doc:id="4c23bab3-9935-4ff8-bb54-6700025954f4" >
+		<choice doc:name="Choice" doc:id="06b90def-51db-4a85-803b-57341fe3bbd7" >
+			<when expression="#[attributes.queryParams.soqlWhereClause != null]">
+				<ee:transform doc:name="Query for fetching the record from salesforce" doc:id="60d40538-deeb-4a07-92da-ab143e653ad1">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"query": " SELECT contactNumber__c,dateOfJoined__c,emailId__c,Id,employeeId__c,Name,yearsWorked__c,id__c,lastWorkingDate__c,projectName__c,technology__c FROM formerEmployee__c WHERE " ++ attributes.queryParams.soqlWhereClause as String
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<salesforce:query doc:name="Fecthing the details using queryParameter" doc:id="8e61fd96-6efd-4005-b1dc-646389eb452b" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[#[payload.query]]]></salesforce:salesforce-query>
+				</salesforce:query>
+			</when>
+			<otherwise >
+				<salesforce:query doc:name="This connector will fetch all the records from salesforce particular object" doc:id="e7806235-9a8c-47d8-88b3-d1049a0c34b3" config-ref="Salesforce_Config1">
+					<salesforce:salesforce-query ><![CDATA[SELECT contactNumber__c,Id,dateOfJoined__c,emailId__c,employeeId__c,Name,yearsWorked__c,id__c,lastWorkingDate__c,projectName__c,technology__c FROM formerEmployee__c]]></salesforce:salesforce-query>
+				</salesforce:query>
+			
+</otherwise>
+		</choice>
+		<ee:transform doc:name="It will display actual payload" doc:id="7d068704-a8bb-4437-8ae4-807673a056ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="formerEmployee-getbyidFlow" doc:id="27e7c54f-0159-4cdb-b32d-7fcc427f9626" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter " doc:id="1a0a7b90-f197-43fd-8134-7ef59a77688a" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT contactNumber__c,Id,dateOfJoined__c,emailId__c,employeeId__c,Name,yearsWorked__c,id__c,lastWorkingDate__c,projectName__c,technology__c FROM formerEmployee__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="It will display actual payload" doc:id="15fe50c2-f19a-4fd3-b686-d53f4f3cd313" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="formerEmployee-deleteFlow3" doc:id="cd5fa3d2-73ab-4489-9ee8-b63a5a0fbb5c" >
+		<salesforce:query doc:name="Fecthing the single record by using UriParameter " doc:id="141f5a02-744f-4f67-b2ee-6b49c2e487df" config-ref="Salesforce_Config1">
+			<salesforce:salesforce-query ><![CDATA[SELECT contactNumber__c,dateOfJoined__c,emailId__c,Id,employeeId__c,Name,yearsWorked__c,id__c,lastWorkingDate__c,projectName__c,technology__c FROM formerEmployee__c WHERE employeeId__c = ':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[output application/java
+---
+{
+	id : attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<salesforce:delete doc:name="Deleting Records" doc:id="c6d02f6d-0bd0-4f02-b1b3-22390c69e887" config-ref="Salesforce_Config1">
+			<salesforce:ids ><![CDATA[#[payload.Id]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="It will display actual payload" doc:id="ab50c796-962d-42aa-9c6d-fd80d32a9d73" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="formerEmployee-upsertFlow" doc:id="0d20f2a1-d9ad-4aba-b5a5-01d1c25f0dd3" >
+		<ee:transform doc:name="Mapping Incoming payload" doc:id="3f297fc0-137a-45bf-8100-84dd2f53a17c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map {
+	contactNumber__c: $.contactNumber,
+	dateOfJoined__c: $.dateOfJoined,
+	emailId__c: $.emailId,
+	employeeId__c: $.employeeId,
+	Name:$.employeeName,
+	yearsWorked__c: $.yearsWorked,
+	id__c: $.id,
+	lastWorkingDate__c: $.lastWorkingDate,
+	projectName__c: $.projectName,
+	technology__c: $.technology
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="If data already exists it will update else it will insert like new row" doc:id="f246ca26-2062-4476-aaba-b6e944d0e9bc" objectType="formerEmployee__c" externalIdFieldName="employeeId__c" config-ref="Salesforce_Config1"/>
+		<ee:transform doc:name="It will display actual payload" doc:id="79decdf3-b0e6-491d-9f72-77446b1943cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

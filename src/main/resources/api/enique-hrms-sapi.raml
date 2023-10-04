@@ -1,0 +1,713 @@
+#%RAML 1.0
+title: enique-hrms-sapi
+
+types:
+  employee: !include datatypes/employee-dataType.raml
+  manager: !include datatypes/manager-dataType.raml
+  department: !include /datatypes/department-dataType.raml
+  expenses: !include datatypes/expenses-dataType.raml
+  officeReadiness: !include datatypes/OfficeReadiness-dataType.raml
+  announcements: !include datatypes/announcements-dataType.raml
+  project: !include /datatypes/project-dataType.raml
+  attendance: !include datatypes/attendance-dataType.raml
+  compensation: !include datatypes/compensation-dataType.raml
+  formerEmployee: !include datatypes/formeremployee-dataType.raml
+  leave: !include datatypes/leaves-dataType.raml
+  personalDetails: !include datatypes/personaldetails-dataType.raml
+  resignationDetails: !include datatypes/resignationdetails-dataType.raml
+  applicant: !include /datatypes/applicant-dataType.raml
+  optionalHoliday: !include /datatypes/optionalHoliday.raml
+
+/v1:
+ /sapi:
+  /employee:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: employee[]
+            examples:
+              output: !include examples/employee/get-employee-response.json
+   post:
+    body:
+      application/json:
+        type: employee[]
+        example: !include examples/employee/create-employee-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include examples/employee/post-employee-response.json         
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: employee[]
+              example: !include examples/employee/getbyid-employee-response.json 
+    patch:
+      body:
+        application/json:
+          type: employee[]
+          example: !include examples/employee/create-employee-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/employee/post-employee-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include examples/employee/delete-employee-response.json
+  /manager:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: manager[]
+            examples:
+              output: !include examples/manager/get-manager-response.json
+   post:
+    body:
+      application/json:
+        type: manager[]
+        example: !include /examples/manager/create-manager-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/manager/post-manager-response.json           
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: manager[]
+              example: !include /examples/manager/getbyid-manager-response.json    
+    patch:
+      body:
+        application/json:
+          type: manager[]
+          example: !include /examples/manager/create-manager-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/manager/patch-manger-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/manager/delete-manager-response.json
+  /department:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: department[]
+            examples:
+              output: !include /examples/department/get-department-request.json
+   post:
+    body:
+      application/json:
+        type: department[]
+        example: !include /examples/department/create-department-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/department/post-department-response.json
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: department[]
+              example: !include /examples/department/getbyid-department-response.json    
+    patch:
+      body:
+        application/json:
+          type: department[]
+          example: !include /examples/department/create-department-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/department/patch-department-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/department/delete-department-response.json
+  /expenses:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: expenses[]
+            examples:
+              output: !include /examples/expenses/get-expenses-response.json
+   post:
+    body:
+      application/json:
+        type: expenses[]
+        example: !include /examples/expenses/create-expenses-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/expenses/post-expenses-response.json       
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: expenses[]
+              example: !include /examples/expenses/getbyid-expenses-response.json
+    patch:
+      body:
+        application/json:
+          type: expenses[]
+          example: !include /examples/expenses/create-expenses-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/expenses/patch-expenses-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/expenses/delete-expenses-response.json
+  /officeReadiness:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: officeReadiness[]
+            examples:
+              output: !include /examples/officeReadiness/get-officeReadiness-response.json
+   post:
+    body:
+      application/json:
+        type: officeReadiness[]
+        example: !include /examples/officeReadiness/create-officeReadiness-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/officeReadiness/post-officeReadiness-response.json        
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: officeReadiness[]
+              example: !include /examples/officeReadiness/getbyid-officeReadiness-response.json
+    patch:
+      body:
+        application/json:
+          type: officeReadiness[]
+          example: !include /examples/officeReadiness/create-officeReadiness-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/officeReadiness/patch-officeReadiness-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/officeReadiness/delete-officeReadiness-response.json
+  /announcements:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: announcements[]
+            examples:
+              output: !include /examples/announcements/get-announcements-response.json
+   post:
+    body:
+      application/json:
+        type: announcements[]
+        example: !include /examples/announcements/create-announcements-response.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/announcements/post-announcements-response.json        
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: announcements[]
+              example: !include /examples/announcements/getbyid-announcements-response.json
+    patch:
+      body:
+        application/json:
+          type: announcements[]
+          example: !include /examples/announcements/create-announcements-response.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/announcements/patch-announcements-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/announcements/delete-announcements-response.json
+  
+  /project:
+   get:
+    queryParameters:
+      soqlWhereClause:
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: project[]
+            examples:
+              output: !include /examples/project/get-project-response.json
+   post:
+    body:
+      application/json:
+        type: project[]
+        example: !include /examples/project/get-project-response.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include /examples/project/post-project-response.json      
+   /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: project[]
+              example: !include /examples/project/getbyid-project-response.json
+    patch:
+      body:
+        application/json:
+          type: project[]
+          example: !include /examples/project/create-project-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include /examples/project/patch-project-response.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: 
+                !include /examples/project/delete-project-response.json
+  /attendance:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: attendance[]
+             example: !include examples/attendance/get-attendance-response.json
+       post:
+          body:
+           application/json:
+            type: attendance[]
+            example: !include examples/attendance/create-attendance-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/attendance/post-attendance-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: attendance[]
+                  example: !include examples/attendance/getbyid-attendance-response.json
+         patch:
+           body:
+            application/json:
+              type: attendance[]
+              example: !include examples/attendance/create-attendance-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/attendance/patch-attendance-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/attendance/delete-attendance-response.json
+  /compensation:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: compensation[]
+             example: !include examples/compensation/get-compensation-response.json
+       post:
+          body:
+           application/json:
+            type: compensation[]
+            example: !include examples/compensation/create-compensation-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/compensation/post-compensation-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: compensation[]
+                  example: !include examples/compensation/getbyid-compensation-response.json
+         patch:
+           body:
+            application/json:
+              type: compensation[]
+              example: !include examples/compensation/create-compensation-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/compensation/patch-compensation-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/compensation/delete-compensation-response.json
+  /formerEmployee:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: formerEmployee[]
+             example: !include examples/formeremployee/get-formeremployee-response.json
+       post:
+          body:
+           application/json:
+            type: formerEmployee[]
+            example: !include examples/formeremployee/create-formeremployee-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/formeremployee/post-formeremployee-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: formerEmployee[]
+                  example: !include examples/formeremployee/getbyid-formeremployee-response.json
+         patch:
+           body:
+            application/json:
+              type: formerEmployee[]
+              example: !include examples/formeremployee/create-formeremployee-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/formeremployee/patch-formeremployee-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/formeremployee/delete-formeremployee-response.json
+  /leave:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: leave[]
+             example: !include examples/leave/get-leave-response.json
+       post:
+          body:
+           application/json:
+            type: leave[]
+            example: !include examples/leave/create-leave-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/leave/post-leave-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: leave[]
+                  example: !include examples/leave/getbyid-leave-response.json
+         patch:
+           body:
+            application/json:
+              type: leave[]
+              example: !include examples/leave/create-leave-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/leave/patch-leave-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/leave/delete-leave-response.json
+  /personalDetails:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: personalDetails[]
+             example: !include examples/personaldetails/get-personaldetails-response.json
+       post:
+          body:
+           application/json:
+            type: personalDetails[]
+            example: !include examples/personaldetails/create-personaldetails-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/personaldetails/post-personaldetails-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: personalDetails[]
+                  example: !include examples/personaldetails/getbyid-personaldetails-response.json
+         patch:
+           body:
+            application/json:
+              type: personalDetails[]
+              example: !include examples/personaldetails/create-personaldetails-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/personaldetails/patch-personaldetails-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/personaldetails/delete-personaldetails-response.json
+  /resignationDetails:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: resignationDetails[]
+             example: !include examples/resignationdetails/get-resignationdetails-response.json
+       post:
+          body:
+           application/json:
+            type: resignationDetails[]
+            example: !include examples/resignationdetails/create-resignationdetails-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include examples/resignationdetails/post-resignationdetails-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: resignationDetails[]
+                  example: !include examples/resignationdetails/getbyid-resignationdetails-response.json
+         patch:
+           body:
+            application/json:
+              type: resignationDetails[]
+              example: !include examples/resignationdetails/create-resignationdetails-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/resignationdetails/patch-resignationdetails-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/resignationdetails/delete-resignationdetails-response.json
+  /applicant:
+       get:
+         queryParameters:
+          soqlWhereClause:
+           required: false
+         responses:
+          200:
+           body:
+            application/json:
+             type: applicant[]
+             example: !include /examples/applicant/get-applicant-response.json
+       post:
+          body:
+           application/json:
+            type: applicant[]
+            example: !include /examples/applicant/create-applicant-request.json
+          responses:
+            201:
+              body:
+               application/json:
+                 example: !include /examples/applicant/post-applicant-response.json
+       /{id}:
+         get:
+           responses:
+            200:
+              body:
+                application/json:
+                  type: applicant[]
+                  example: !include /examples/applicant/getbyid-applicant-response.json
+         patch:
+           body:
+            application/json:
+              type: applicant[]
+              example: !include /examples/applicant/create-applicant-request.json
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include /examples/applicant/patch-applicant-response.json
+         delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include /examples/applicant/delete-applicant-response.json
+  /optionalHoliday:
+     get:
+      queryParameters:
+       soqlWhereClause:
+        required: false
+      responses:
+       200:
+        body:
+          application/json:
+            type: optionalHoliday[]
+            examples:
+              output: !include example\get-optionalHolidays.json
+     post:
+      body:
+       application/json:
+        type: optionalHoliday[]
+        example: !include example\create-optionalHolidays.json
+      responses:
+          201:
+           body:
+            application/json:
+              example: !include example\post-optionalHolidays.json
+     /{id}:
+      get:
+       responses:
+        200:
+          body:
+            application/json:
+              type: optionalHoliday[]
+              example: !include example\get-optionalHolidays.json
+      patch:
+       body:
+        application/json:
+          type: optionalHoliday[]
+          example: !include example\create-optionalHolidays.json
+       responses:
+        200:
+          body:
+            application/json:
+              example: !include example\post-optionalHolidays.json
+      delete:
+           responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/resignationdetails/delete-resignationdetails-response.json                  

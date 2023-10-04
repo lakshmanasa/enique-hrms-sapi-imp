@@ -1,0 +1,12 @@
+[
+{
+  "id": "1",
+   "employeeId": "ES0006", 
+   "expenseType": "InternetBill",
+   "amount": "1100",
+   "approved": "yes",
+   "status": "approved",
+   "expensesName": "Transport"
+
+}
+]

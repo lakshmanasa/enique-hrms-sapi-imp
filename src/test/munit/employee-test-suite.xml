@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="employee-test-suite.xml" />
+	<munit:test name="employee-test-suite-employee-postFlowTest" doc:id="94b8e460-d423-41b8-bbee-72b2405d0794" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c51f62d4-9e81-47ce-a088-8a2297ef7162" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="8f311506-996a-4a84-8ae4-3a6442b64604" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/afterPost.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="fe734908-eae1-4967-91de-6bae8bf2d1a4" >
+				<munit:payload value="#[readUrl('classpath://employee/post-body.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to employee-postFlow" doc:id="c6a94341-2095-445f-a96a-773210796ab1" name="employee-postFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="9ffbe08b-81ad-4385-8f02-c9d8f2c44936" actual="#[payload]" expected="#[readUrl('classpath://employee/afterPost.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="employee-test-suite-employee-get-by-id-FlowTest" doc:id="464800b2-36c9-4365-8317-26a6f59ccd9d" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2729714d-8c2a-4097-9eed-6a22137c54c9" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ed1e042e-1dce-4128-b57f-7cc80cec53fc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://expenses/queryInDelete.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="989f8063-cc98-4fa4-892a-d22a2d8734e2" >
+				<munit:attributes value='#[{uriParams : {id: "75"}}]' encoding="UTF-8" mediaType="application/java" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to employee-get-by-id-Flow" doc:id="fc30dc41-e766-48d7-a82b-96282b828920" name="employee-get-by-id-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="76c378bf-63cd-4f69-b853-ab0fbacd8b00" actual="#[payload]" expected="#[readUrl('classpath://expenses/queryInDelete.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="employee-test-suite-employee-get-all-details-or-get-by-queryparameterTest" doc:id="92a9261f-06a6-4edc-aecc-b341d66cb58c" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="884fdc5a-ecdb-4338-b950-e825006e0ec3" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c7a09fd5-5a29-4c89-a78c-ac2bba2ba9b8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/get-default.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="96007a36-dbf5-453a-b771-6a95ab39055f" >
+				<munit:attributes value="#[ { &quot;queryParams&quot;:{&quot;soqlWhereClause&quot;: &quot;employeeId__c='45'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to employee-get-all-details-or-get-by-queryparameter" doc:id="be52c9c0-3bcc-49d0-9d01-cc14eef4eb53" name="employee-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="a5957867-f330-4e88-96ff-f5e4feddb5b7" actual="#[payload]" expected="#[readUrl('classpath://employee/get-default.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="employee-test-suite-employee-delete-FlowTest" doc:id="c34715d0-7e95-4124-9280-f7c397b9482d" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0dd61b14-7937-444d-85e9-7cce7c0f6109" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b7bfaa74-057b-4fe1-9d09-47dee16d9584" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/queryInDelete.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="6eddf5da-3c82-42cb-af6a-95547e4e8b9f" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="bf804bc2-f49e-4142-be1b-6c1e7c220174" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/afterDelete.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="4b90c964-d8c5-4bf3-8def-c6dd3406ae19" >
+				<munit:attributes value='#[{uriParams : {id: "45"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to employee-delete-Flow" doc:id="b474dc63-327d-4c51-a404-5070e9c2886e" name="employee-delete-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="01a66c24-a0b0-40f3-97e3-d116f0431004" actual="#[payload]" expected="#[readUrl('classpath://employee/afterDelete.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="employee-test-suite-employee-upsert-FlowTest" doc:id="a92a8dfe-4a50-4c52-b0e1-3b46e64d7817" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9b2af5e0-4bf8-4466-afa6-d69d83d872a1" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1e87506d-23a0-4881-893c-4fc7a7db98e5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/afterPost.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="9867240e-f82c-4b57-ae9d-f80d253a8425" >
+				<munit:payload value="#[readUrl('classpath://project/post-body.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to employee-upsert-Flow" doc:id="8ba4eacc-4416-4b8c-b11a-a1232d6e1542" name="employee-upsert-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="fab1cf55-2111-4393-bddd-6ed1d5da803b" actual="#[payload]" expected="#[readUrl('classpath://employee/afterPost.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="employee-test-suite-employee-get-all-details-or-get-by-queryparameterTest1" doc:id="95a2da4f-b5d6-497f-9478-0ba307273aeb" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9b1bb126-dcda-4aab-bf9a-864924b3337a" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6f8ad000-b08c-4ad5-9629-5cfadce76c54" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://employee/get-default.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="8c8a8218-b0dc-45b6-a38a-517dcf26103a" />
+			<flow-ref doc:name="Flow-ref to employee-get-all-details-or-get-by-queryparameter" doc:id="b5d1efb7-9710-4afc-b7c5-c0ede97f77ef" name="employee-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="93dfb4bf-9f5a-4d28-9a1b-0e3f2f4182e4" actual="#[payload]" expected="#[readUrl('classpath://employee/get-default.dwl')]" message='#["payloads do not match"]'/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

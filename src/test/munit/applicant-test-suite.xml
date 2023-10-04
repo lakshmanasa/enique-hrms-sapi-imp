@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="applicant-test-suite.xml" />
+	<munit:test name="applicant-test-suite-POST-ApplicantTest" doc:id="581d6635-4ea2-4f96-9e04-61bd767ac9b0" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a8a4fa9f-7174-4c07-83b1-722e047af111" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f13f9d97-d31b-428f-bd71-dd0cc67dbded" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d5962809-f124-464b-be05-c54b3e78a98c" >
+				<munit:payload value="#[readUrl('classpath://applicant/for-post.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to POST-Applicant" doc:id="cca98bc2-a69f-4d90-8d0b-54e4cc68e0c7" name="POST-Applicant"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="25643f79-b443-4b0d-945a-2d54ce4b7df5" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="payload is empty"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="applicant-test-suite-applicant-get-all-details" doc:id="1eaa11a8-8e47-4896-b66c-1bbc73cd212b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="7c17bd33-4f84-4e21-a01f-7c1f5e42dcaa" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5e9bb423-750c-4200-a55d-2b9997f7c052" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to applicant-get-all-details-or-get-by-queryparameter" doc:id="676195eb-79e3-4962-a7e7-af7a7afd2f3d" name="applicant-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="fd9eab86-c1fb-46f8-8163-3f71748c57ee" is="#[MunitTools::notNullValue()]" expression="#[payload]" message="payload is empty"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="applicant-test-suite-applicant-get-by-queryparameterTest" doc:id="0b780599-88b5-41fc-aaeb-d65240cabed2" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2e1f21a6-065b-41dc-8c46-39e806254cfa" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7e3cfd96-00ee-4c9d-882b-ca5e821c6643" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/get-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="30415686-7c3e-41d5-9967-892288a77502" >
+				<munit:attributes value="#[{queryParams:{soqlWhereClause:&quot;Name='Lakshman'&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to applicant-get-all-details-or-get-by-queryparameter" doc:id="1a5b33f3-253c-44a0-ad60-4170066ae1af" name="applicant-get-all-details-or-get-by-queryparameter"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="394ce13a-0e2b-4598-9dd0-f66f6db70491" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="applicant-test-suite-applicant-get-by-idTest" doc:id="74bdb3a5-4f26-4185-b002-280f108f6fe3" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e363d37a-b8c0-4da0-ae5d-e87f45088ad9" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b05d0a27-df75-4e5a-9c53-3ce1b9aed875" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="56b64a68-bfd2-4c9a-a172-2d8675aff730" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to applicant-get-by-id" doc:id="87173248-cf7c-4493-b770-1dc8d992f885" name="applicant-get-by-id"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="bba74bc7-237b-4374-a860-0998d16a1a52" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="applicant-test-suite-DELETE-ApplicantsTest" doc:id="6588f27f-8c1f-4d74-aa90-42abb35a87e2" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="ebcb4496-ba97-48b7-a427-77a6bc6f8702" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="40276e5f-6889-4efd-b559-3845cbe5990c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/get-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="01cec1fe-6798-4834-bed6-c2c5a4fb6664" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7169b5b9-afd1-41a7-94d3-84a8c3a099e3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/for-response.dwl')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="63bbe5c5-0b7e-4e9e-adb9-eefb91398a0e" >
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to DELETE-Applicants" doc:id="783d5baf-14a0-440e-99e3-5f4a846acd0a" name="DELETE-Applicants"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2a5ac0e7-3e9d-40f8-94dc-d65b46626275" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="applicant-test-suite-applicant-update-by-idTest" doc:id="7176e6f1-bffd-4912-a618-7828ed5a04b0" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="f37ef3c8-4f60-4ff2-bfef-61638ae3b830" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c7175738-9630-45c0-8345-68c59c1378ec" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://applicant/for-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="cc6b786a-ca9c-45e6-a681-e2a4b895e19a" >
+				<munit:payload value="#[readUrl('classpath://applicant/for-patch.dwl')]" />
+				<munit:attributes value="#[{uriParams:{id:'ES00001'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to applicant-update-by-id" doc:id="57380a46-0ed7-4e87-ba2f-73f0efdd3a70" name="applicant-update-by-id"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c074e56a-0b1c-436a-8bae-c1eefa192aac" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
